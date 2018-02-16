@@ -19,7 +19,7 @@
     <![endif]--> 
     <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/responsive9.css" />
-    <title>SAWASAWA</title>
+    <title>PANDAGALI</title>
     <style type="text/css">
         .itemheight {
             max-height:370px;
