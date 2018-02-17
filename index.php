@@ -19,7 +19,7 @@
     <![endif]--> 
     <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/responsive9.css" />
-    <title>PANDAGALI</title>
+    <title>SAWASAWA</title>
     <style type="text/css">
         .itemheight {
             max-height:370px;
@@ -63,101 +63,92 @@
 </div>
 <!-- END Home slideder-->
 <!-- servives -->
-<div class="service">
+<!-- <div class="service">
     <div class="container ">
-        <!-- <div class="row"> -->
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
-                <div class="content">
-                    <div class="icon">
-                        <span><img alt="services" src="assets/data/market/struct.png" /></span>
-                    </div>
-                    <div class="info">
-                        <h3>Shipping Service</h3>
-                        <span>We facilitate by shiping to your current location</span>
-                    </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
+            <div class="content">
+                <div class="icon">
+                    <span><img alt="services" src="assets/data/market/struct.png" /></span>
                 </div>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
-                <div class="content">
-                    <div class="icon">
-                        <span class="lnr lnr-sync"></span>
-                    </div>
-                    <div class="info">
-                        <h3>Return </h3>
-                        <span>Cansel your order within 24 hours</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
-                <div class="content">
-                    <div class="icon">
-                        <span class="lnr lnr-phone-handset"></span>
-                    </div>
-                    <div class="info" >
-                        <h3>24/7 support</h3>
-                        <span>call +250784848236 fur support</span>
-                    </div>
-                </div>
-            </div>
-        <!-- </div> -->
-    </div>
-</div>
-<!-- end services -->
-
-<!---->
-<div class="content-page">
-    <div class="container">
-        <div class="product-single main-product">
-            <div class="tab-container row">
-                <div class="navbar nav-menu" style="margin-top:unset;">
-                    <div class="navbar-label"><h3 class="title"><span class="icon fa fa-star"></span><span class="label-prod">Available Goods</span></h3></div>
-                </div>
-                <div id="tab-1" class="tab-panel active">
-                    <ul class="product-list" data-dots="false" data-loop="true" data-nav = "true" data-margin = "0" data-autoplayTimeout="1000" data-autoplayHoverPause = "true" data-responsive='{"0":{"items":1},"480":{"items":2}, "991":{"items":3},"1200":{"items":4}}'>
-                    <?php
-						include ("db.php");
-						$sql2 = $db->query("SELECT * FROM `items1` WHERE quantity > 0 ORDER BY itemId DESC");
-						while($row = mysqli_fetch_array($sql2))
-						{
-                            $postTitle = $row['itemName'];
-                            $priceStatus = $row['unit'];
-                            $price = $row['unityPrice'];
-            	        ?>
-                        <li class="item col-md-3 itemheight">
-        					<div class="left-block">
-                                <a href="post.php?postId=<?php echo $row['itemId'];?>">
-                                    <img class="img-responsive" alt="<?php echo $postTitle;?>" src="products/<?php echo $row['itemId'];?>.jpg"/>
-                                </a>
-                                <div class="add-to-cart">
-                                    <a title="Add to Cart" href="post.php?postId=<?php echo"".$row['itemId']."";?>">View Product</a>
-                                </div>
-                            </div>
-                            <div class="right-block">
-                                <div class="left-p-info">
-                                    <h5 class="product-name"><a href="post.php?postId=<?php echo"".$row['itemId']."";?>"><?php echo $postTitle;?></a></h5>
-                                </div>
-                                <div class="content_price">
-                                    <span class="price product-price"><?php echo number_format($price);?> Rwf</span>
-                                </div>
-                            </div>
-                        </li>
-                        <?php ;} ?>
-                     </ul>
-                
-                    </ul>
+                <div class="info">
+                    <h3>Shipping Service</h3>
+                    <span>We facilitate by shiping to your current location</span>
                 </div>
             </div>
         </div>
-        <!-- <div class="advertising">
-            <div class="row">
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <img class="img-responsive" src="assets/data/market/banner/adv2.jpg" alt="">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
+            <div class="content">
+                <div class="icon">
+                    <span class="lnr lnr-sync"></span>
                 </div>
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                    <img class="img-responsive" src="assets/data/market/banner/adv1.jpg" alt="">
+                <div class="info">
+                    <h3>Return </h3>
+                    <span>Cansel your order within 24 hours</span>
                 </div>
             </div>
-        </div> -->
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 service-item equalheight">
+            <div class="content">
+                <div class="icon">
+                    <span class="lnr lnr-phone-handset"></span>
+                </div>
+                <div class="info" >
+                    <h3>24/7 support</h3>
+                    <span>call +250784848236 fur support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ --><!-- end services -->
+
+<!---->
+<div class="content-page" style="margin-top: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-lg-3"></div>
+            <div class="product-single main-product col-lg-9 col-md-9">
+                <div class="tab-container row">
+                    <div class="navbar nav-menu" style="margin-top:unset;">
+                        <div class="navbar-label"><h3 class="title"><span class="icon fa fa-star"></span><span class="label-prod">Available Goods</span></h3></div>
+                    </div>
+                    <div id="tab-1" class="tab-panel active">
+                        <ul class="product-list" data-dots="false" data-loop="true" data-nav = "true" data-margin = "0" data-autoplayTimeout="1000" data-autoplayHoverPause = "true" data-responsive='{"0":{"items":1},"480":{"items":2}, "991":{"items":3},"1200":{"items":4}}'>
+                        <?php
+    						include ("db.php");
+    						$sql2 = $db->query("SELECT * FROM `items1` WHERE quantity > 0 ORDER BY itemId DESC");
+    						while($row = mysqli_fetch_array($sql2))
+    						{
+                                $postTitle = $row['itemName'];
+                                $priceStatus = $row['unit'];
+                                $price = $row['unityPrice'];
+                	        ?>
+                            <li class="item col-md-4 itemheight">
+            					<div class="left-block">
+                                    <a href="post.php?postId=<?php echo $row['itemId'];?>">
+                                        <img class="img-responsive" alt="<?php echo $postTitle;?>" src="products/<?php echo $row['itemId'];?>.jpg"/>
+                                    </a>
+                                    <div class="add-to-cart">
+                                        <a title="Add to Cart" href="post.php?postId=<?php echo"".$row['itemId']."";?>">View Product</a>
+                                    </div>
+                                </div>
+                                <div class="right-block">
+                                    <div class="left-p-info">
+                                        <h5 class="product-name"><a href="post.php?postId=<?php echo"".$row['itemId']."";?>"><?php echo $postTitle;?></a></h5>
+                                    </div>
+                                    <div class="content_price">
+                                        <span class="price product-price"><?php echo number_format($price);?> Rwf</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <?php ;} ?>
+                         </ul>
+                    
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="footer">
             <div class="row">
                 <!-- Column left -->
