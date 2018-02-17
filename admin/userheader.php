@@ -69,22 +69,9 @@
         <div class="menu_section">
             <ul>
                 <li title="Dashboard">
-                    <a href="../index.php">
+                    <a href="items.php">
                         <span class="menu_icon"><i class="material-icons">home</i></span>
                         <span class="menu_title">HOME</span>
-                    </a>
-                </li>
-                <li title="Dashboard">
-                    <a href="#">
-                        <span class="menu_icon"><i class="material-icons">comment</i></span>
-                        <span class="menu_title">Messeges <?php 
-			$sqlmesseges = $db->query("SELECT c.postcode, c.commentBy, p.postedBy
-FROM postscomments c
-INNER JOIN posts p
-ON c.postcode = p.postId
-AND p.postedBy Like '%$username%'");
-			//$num_of_messeges = mysqli_num_rows($sqlmesseges);
-//echo $num_of_messeges;?></span>
                     </a>
                 </li>
 				<?php 
@@ -93,22 +80,32 @@ AND p.postedBy Like '%$username%'");
 								if($countComanies1>0)
 									{
 										while($row = mysqli_fetch_array($sqlseller1)) 
-											{
-                                                $companyid = $row['companyId'];
-                                                $companyName = $row['companyName'];
-												$companyType = $row['companyType'];
-                                                echo '<li title="Dashboard">
-                    <a href="items.php?companyid='.$companyid.'">
+										{
+                                            $companyid = $row['companyId'];
+                                            $companyName = $row['companyName'];
+											$companyType = $row['companyType'];
+                                            if ($companyType == 'Shipper') {
+                                                echo '
+                                                    <li title="Dashboard"><a href="items.php?companyid='.$companyid.'">
                                                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                                                         <span class="menu_title">'.$row['companyName'].'</span></a>
-                </li>
-				<li title="Walet">
-                    <a href="walet.php?companyid='.$companyid.'">
+                                                    </li>
+                                                ';
+                                            }
+                                            else {
+                                                echo '
+                                                    <li title="Dashboard"><a href="items.php?companyid='.$companyid.'">
+                                                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                                                        <span class="menu_title">'.$row['companyName'].'</span></a>
+                                                    </li>
+                                    				<li title="Walet">
+                                                        <a href="walet.php?companyid='.$companyid.'">
                                                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                                                         <span class="menu_title">'.$row['companyName'].' \'s Walet</span></a>
-                </li>
-				';
-											}
+                                                    </li>
+                                    			';
+                                            }
+										}
 									}
 								?>
                     
