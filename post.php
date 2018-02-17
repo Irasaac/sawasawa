@@ -108,9 +108,6 @@
                         <a href="post.php?postId='.$row['itemId'].'">
                             <img class="img-responsive" alt="'.$row['itemName'].'" src="products/'.$row['itemId'].'.jpg" />
                         </a>
-                        <div class="action">
-                            <a title="Add to my wishlist" class="heart fa fa-heart" href="post.php?postId='.$row['itemId'].'"></a>
-                        </div>
                         <div class="add-to-cart">
                             <a title="Add to Cart" class="" href="post.php?postId='.$row['itemId'].'">Add to Cart</a>
                         </div>
@@ -191,16 +188,12 @@
 	  <script src="js/jquery.js"></script>
       <style type="text/css">
         .shipp-card {
-            position: relative;
-            border: none; 
-            margin: 0 0 20px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
-            -o-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-            border-radius: 5px;
-            overflow: hidden;
             background: #fff;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+            border: none;
+            overflow: hidden;
+            margin-bottom: 10px;
         }
         .modal-body {
             padding: unset;
@@ -297,11 +290,78 @@
             </div>
         </div>
         <div class="page-content" style="background: #e6e6e6; padding: unset;">
-            <div class="container" style="    padding-left: 50px;
+            <div class="container" style="padding-left: 50px;
                 padding-right: 50px;
-                background: #fff;">
+                background: #ececec">
                 <div class="row">
                     <!-- Main content -->
+                    <div class="col-left col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                        <div class="row relative-product" style="margin-top: 70px;">
+                            <div class="nav-menu custom-menu">
+                                <div class="navbar-label">
+                                    <h3 class="title">Suggested Agent</h3>
+                                </div>
+                            </div>
+                        </div><br>
+                        <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 300px;">
+                            <div>
+                                <?php 
+                                    $selectAgent = $db->query("SELECT * FROM `users` WHERE account_type = 'agent'");
+                                    while($agent = mysqli_fetch_array($selectAgent)){
+                                        $agentId = $agent['id'];
+                                        $agentLocation = $agent['adress'];
+
+                                       ?>
+                                            <div data-toggle="modal" data-target="#<?php echo $agent['id'];?>" class="shipp-card" title="click for more information">
+                                                <div style="text-align: center;"><h2><?php echo $agent['username'];?></h2></div>
+                                                <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url('shipper/1.jpg'); background-size: cover; height: 90px; width: 90px; background-position: center;">
+                                                </div>
+                                                <div class="row" style="margin: 5px -10px;">
+                                                    <div class="col-md-3">
+                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url('shipper/1.jpg'); background-repeat: no-repeat;background-position: center;"></div>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <?php echo $agent['names'];?><br>
+                                                        <?php echo $agent['phone'];?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
+                                            <div id="<?php echo $agent['id'];?>" class="modal fade" role="dialog">
+                                              <div class="modal-dialog">
+
+                                                <!-- Modal content-->
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title"><?php echo $agent['title'];?></h4>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <div class="col-md-3"><img class="img-circle" src="assets/images/users/<?php echo $shipperId;?>.jpg"></div>
+                                                    <div class="col-md-9">
+                                                        <p style="text-align:left;">
+                                                            <b>Names: </b> <?php echo $agent['names'];?><br>
+                                                            <b>Contact: </b><?php echo $agent['phone'];?><br>
+                                                            <b>Address: </b> <?php echo $agent['adress'];?><br>
+                                                        </p>
+                                                    </div>
+                                                    <hr>
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                  </div>
+                                                </div>
+
+                                              </div>
+                                            </div>
+                                        <?php 
+                                    }
+                                ?>
+                            </div>
+                        </div>
+                        <!-- end Block fillter -->
+                    </div><!-- End Column left -->
                     <div class="col-lg-8 col-md-8 col-sm-12 detail" style="margin-top: 70px;">
                         <div class="primary-box">
                             <!-- product-imge-->
@@ -580,73 +640,6 @@
                                                             <b>Dist btn P and C: </b> <?php echo $distbtnproandcli;?> km<br>
                                                             <b>Total Distance: </b> <?php echo $totalDistance;?> km<br>
                                                             <b>Amount: </b> <?php echo number_format($totalDistance * $shipper['pricepkilo']) ;?> frw<br>
-                                                        </p>
-                                                    </div>
-                                                    <hr>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                  </div>
-                                                </div>
-
-                                              </div>
-                                            </div>
-                                        <?php 
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                        <!-- end Block fillter -->
-                    </div><!-- End Column left -->
-                    <div class="col-left col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <div class="row relative-product" style="margin-top: 70px;">
-                            <div class="nav-menu custom-menu">
-                                <div class="navbar-label">
-                                    <h3 class="title">Suggested Agent</h3>
-                                </div>
-                            </div>
-                        </div><br>
-                        <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 300px;">
-                            <div>
-                                <?php 
-                                    $selectAgent = $db->query("SELECT * FROM `users` WHERE account_type = 'agent'");
-                                    while($agent = mysqli_fetch_array($selectAgent)){
-                                        $agentId = $agent['id'];
-                                        $agentLocation = $agent['adress'];
-
-                                       ?>
-                                            <div data-toggle="modal" data-target="#<?php echo $agent['id'];?>" class="shipp-card" title="click for more information">
-                                                <div style="text-align: center;"><h2><?php echo $agent['username'];?></h2></div>
-                                                <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url('shipper/1.jpg'); background-size: cover; height: 90px; width: 90px; background-position: center;">
-                                                </div>
-                                                <div class="row" style="margin: 5px -10px;">
-                                                    <div class="col-md-3">
-                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url('shipper/1.jpg'); background-repeat: no-repeat;background-position: center;"></div>
-                                                    </div>
-                                                    <div class="col-md-9">
-                                                        <?php echo $agent['names'];?><br>
-                                                        <?php echo $agent['phone'];?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div id="<?php echo $agent['id'];?>" class="modal fade" role="dialog">
-                                              <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title"><?php echo $agent['title'];?></h4>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                    <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                    <div class="col-md-3"><img class="img-circle" src="assets/images/users/<?php echo $shipperId;?>.jpg"></div>
-                                                    <div class="col-md-9">
-                                                        <p style="text-align:left;">
-                                                            <b>Names: </b> <?php echo $agent['names'];?><br>
-                                                            <b>Contact: </b><?php echo $agent['phone'];?><br>
-                                                            <b>Address: </b> <?php echo $agent['adress'];?><br>
                                                         </p>
                                                     </div>
                                                     <hr>
