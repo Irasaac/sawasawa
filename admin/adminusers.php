@@ -102,7 +102,7 @@ if ($existCount > 0) {
 											<th>#</th>
 											<th>names</th>
 											<th>phone</th>
-											<th>email</th>
+											<th>Location</th>
 											<th>Actions</th>
 										</thead>
 										<tbody>
@@ -121,7 +121,7 @@ if ($existCount > 0) {
 															<td>'.$n.'</td>
 															<td>'.$row['names'].'</td>
 															<td>'.$row['phone'].'</td>
-															<td>'.$row['email'].'</td>
+															<td>'.$row['adress'].'</td>
 															<td><a href="javascript:void()" onclick ="editUser(userId= '.$row['id'].')">Edit</a> / <a href="javascript:void()" onclick="removeuser(userId= '.$row['id'].')">Remove</a></td>
 														</tr>';
 													}

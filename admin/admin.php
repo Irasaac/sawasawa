@@ -359,20 +359,20 @@ function removeProduct(productId){
 		{
    			removeProductId=productId;
 			$.ajax({
-					type : "GET",
-					url : "adminscript.php",
-					dataType : "html",
-					cache : "false",
-					data : {
-						
-						removeProductId : removeProductId,
-					},
-					success : function(html, textStatus){
-						$("#productTable").html(html);
-					},
-					error : function(xht, textStatus, errorThrown){
-						alert("Error : " + errorThrown);
-					}
+				type : "GET",
+				url : "adminscript.php",
+				dataType : "html",
+				cache : "false",
+				data : {
+					
+					removeProductId : removeProductId,
+				},
+				success : function(html, textStatus){
+					$("#productTable").html(html);
+				},
+				error : function(xht, textStatus, errorThrown){
+					alert("Error : " + errorThrown);
+				}
 			});
 		}
 }
@@ -640,7 +640,7 @@ function bringTable()
 		//alert(locationId);
 		$.ajax({
 			type : "GET",
-			url : "selectLocation.php",
+			url : "selectLocationadmin.php",
 			dataType : "html",
 			cache : "false",
 			data : {

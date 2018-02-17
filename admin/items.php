@@ -120,7 +120,7 @@ if ($existCount > 0) {
 <div id="page_content">
 	<div id="page_content_inner">
 		<h4 class="heading_b uk-margin-bottom">
-            <a href="user.php"><i class="uk-icon-angle-double-left"></i> Back</a>&nbsp;&nbsp;&nbsp; MANAGE Items in <?php echo $companyName;?></h4>
+            <a href="user.php"><i class="uk-icon-angle-double-left"></i> Back</a>&nbsp;&nbsp;&nbsp; Manage Items in <?php echo $companyName;?></h4>
 
 
 	
@@ -141,15 +141,13 @@ if ($existCount > 0) {
 							{
 								$shippingId = $row['shippingId'];
 								$postTitle = $row['title'];
-								$priceStatus = $row['pricepkilo'];
-								$currentPrice = $row['pricepkilo'];
 								$price = number_format($row['pricepkilo']);
 
 								echo '
 								<div data-product-name="Vitae et.">
 									<div class="md-card md-card-hover-img">
 										<div class="md-card-head uk-text-center uk-position-relative">
-											<div class="uk-badge uk-badge-danger uk-position-absolute uk-position-top-left uk-margin-left uk-margin-top">'.$price.' Rwf</div>
+											<div class="uk-badge uk-badge-danger uk-position-absolute uk-position-top-left uk-margin-left uk-margin-top">'.$price.' Rwf / km</div>
 											<img class="md-card-head-img" src="../shipper/'.$row['shippingId'].'.jpg" alt=""/>
 										</div>
 										<div class="md-card-toolbar">
@@ -162,10 +160,9 @@ if ($existCount > 0) {
 										</div>
 										<div class="md-card-content">
 											<h4 class="heading_c uk-margin-bottom">
-												<span class="sub-heading">Current Price: '.number_format($currentPrice).' Rwf</span>
-												Ending: '.$priceStatus.'
+												<span class="sub-heading">Price: '.$price.' Rwf / Km</span>
 											</h4>
-												<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light waves-effect waves-button waves-light" href="userPost.php?postId='.$row['shippingId'].'">More</a>
+												<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light waves-effect waves-button waves-light" href="userPost.php?carId='.$shippingId.'">More</a>
 										</div>
 									</div>
 								</div>
@@ -183,8 +180,10 @@ if ($existCount > 0) {
 							{
 								$itemId = $row['itemId'];
 								$postTitle = $row['itemName'];
-								$priceStatus = $row['postDeadline'];
+								$priceStatus = $row['unit'];
+								$postDeadline = $row['postDeadline'];
 								$price = number_format($row['unityPrice']);
+								$webPrice = number_format($row['unityPrice'] + ((10/100)*$row['unityPrice']));
 								
 								$sqlprice = $db->query("SELECT * FROM bids WHERE itemCode = '$itemId' ORDER BY transactionID DESC");
 								$rowprice = mysqli_fetch_array($sqlprice);
@@ -194,7 +193,7 @@ if ($existCount > 0) {
 									<div data-product-name="Vitae et.">
 										<div class="md-card md-card-hover-img">
 											<div class="md-card-head uk-text-center uk-position-relative">
-												<div class="uk-badge uk-badge-danger uk-position-absolute uk-position-top-left uk-margin-left uk-margin-top">'.number_format($price).' Rwf</div>
+												<div class="uk-badge uk-badge-danger uk-position-absolute uk-position-top-left uk-margin-left uk-margin-top">'.$price.' Rwf</div>
 												<img class="md-card-head-img" src="../products/'.$row['itemId'].'.jpg" alt=""/>
 											</div>
 											<div class="md-card-toolbar">
@@ -207,8 +206,8 @@ if ($existCount > 0) {
 											</div>
 											<div class="md-card-content">
 												<h4 class="heading_c uk-margin-bottom">
-													<span class="sub-heading">Current Price: '.number_format($price).' Rwf</span>
-													Ending: '.$priceStatus.'
+													<span class="sub-heading">Current Price: '.$webPrice.' Rwf</span>
+													Ending: '.$postDeadline.'
 												</h4>
 												<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light waves-effect waves-button waves-light" href="userPost.php?postId='.$row['itemId'].'">More
 												</a>
