@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 logo">
-                    <a href="#"><img alt="Cavada market" src="assets/images/logo9.png" /></a>
+                    <a href="index.php"><img alt="Cavada market" src="assets/images/logo9.png" /></a>
                 </div>
                 <div class="tool-header">
                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 header-search">
@@ -17,23 +17,16 @@
                             <div class="form-category dropdown">
 							<?php
 								include ("db.php");
-								$sql1 = $db->query("SELECT * FROM `productcategory`");
-								echo'<select class="box-category">';
+								$sql1 = $db->query("SELECT * FROM `levels` WHERE parentId = 0");
+								echo'<select class="box-category">
+                                    <option>All Category</option>
+                                ';
+                                    
 								while($row = mysqli_fetch_array($sql1)){
 									$CatID = $row['catId'];
-									echo'<optgroup label="'.$row['catNane'].'"><option>All Category</option>';
-									$sql2 = $db->query("SELECT * FROM productsubcategory WHERE CatCode='$CatID'");
-									while($row = mysqli_fetch_array($sql2))
-									{
-										$subCatId = $row['subCatId'];
-										echo'<option>'.$row['subCatName'].'</option>';
-										$sql3 = $db->query("SELECT * FROM products WHERE subCatCode='$subCatId'");
-										while($row = mysqli_fetch_array($sql3)){
-											echo'<li>'.$row['productName'].'</li>';
-											}
-										echo'</ul></li>';
-									}
-										echo'</optgroup>';
+									echo'
+                                            <option value="'.$row['id'].'">'.$row['name'].'</option>
+                                    ';
 								}
 								echo'</select>';
 
@@ -71,8 +64,9 @@
                                     while($row = mysqli_fetch_array($sql1))
                                     {
                                     	$CatID = $row['id'];
-                                    	echo'<li>
-                                    <a class="parent" href="category.php?CatID='.$CatID.'"><img class="icon-menu" alt="cavada" src="assets/images/icon/iconvetical_1.png">'.$row['name'].'</a>
+                                    	echo'
+                                        <li>
+                                        <a class="parent" href="cat.php?CatID='.$CatID.'"><img class="icon-menu" alt="cavada" src="assets/images/icon/iconvetical_1.png">'.$row['name'].'</a>
                                     	<div class="vertical-dropdown-menu smartphone">
                                             <div class="vertical-groups clearfix">
                                     			';
@@ -80,17 +74,17 @@
                                     	while($row = mysqli_fetch_array($sql2)){
                                     		$subCatId = $row['id'];
                                     		echo'<div class="mega-group width col-md-12">
-                                    				<h4 class="mega-group-header" href="javascript:void()" onclick ="subshow(subshowid= '.$row['id'].')"><span>'.$row['name'].' v</span></h4>
+                                    				<h4 class="mega-group-header" href="javascript:void()" onclick ="subshow(subshowid= '.$row['id'].')"><span>'.$row['name'].' </span></h4>
                                     				<ul class="group-link-default">
                                     			';
                                     		$sql3 = $db->query("SELECT * FROM levels WHERE parentId='$subCatId' LIMIT 4");
                                     		while($row = mysqli_fetch_array($sql3)){
                                     			echo'
-                                    	<li><a href="#">'.$row['name'].'</a></li>
+                                    	<li><a href="cat.php?CatID='.$subCatId.'">'.$row['name'].'</a></li>
                                     	
                                     ';
                                     			}
-                                    echo'<li><a href="#">more...</a></li>
+                                    echo'<li><a href="cat.php?CatID='.$subCatId.'">more...</a></li>
                                     	</ul>
                                     </div>';
                                     	}

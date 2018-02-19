@@ -119,9 +119,12 @@
     						$sql2 = $db->query("SELECT * FROM `items1` WHERE quantity > 0 ORDER BY itemId DESC");
     						while($row = mysqli_fetch_array($sql2))
     						{
+                                $selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+                                $rowpercentage = mysqli_fetch_array($selectPercentage);
+                                $percentage = $rowpercentage['percentage'];
                                 $postTitle = $row['itemName'];
                                 $priceStatus = $row['unit'];
-                                $price = $row['unityPrice'];
+                                $price = ($row['unityPrice'] + (($percentage/100)*$row['unityPrice']));
                 	        ?>
                             <li class="item col-md-4 itemheight">
             					<div class="left-block">

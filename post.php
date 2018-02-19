@@ -16,14 +16,17 @@
 
     if(isset($_GET['postId']))
     {
+        include("db.php");
+        $selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+        $rowpercentage = mysqli_fetch_array($selectPercentage);
+        $percentage = $rowpercentage['percentage'];
     	$postId = $_GET['postId'];
-    	include("db.php");
     	$sql = $db->query("SELECT * FROM `items1` WHERE itemId = '$postId'");
     	while($row = mysqli_fetch_array($sql))
     	{
             $postTitle = $row['itemName'];
     		$quantity = $row['quantity'];
-    		$price = $row['unityPrice'];
+            $price = ($row['unityPrice'] + (($percentage/100)*$row['unityPrice']));
     		$priceStatus = $row['unit'];
     		$postDesc = $row['description'];
     		$postedDate = $row['inDate'];
@@ -43,6 +46,9 @@
     	{
     		while($row = mysqli_fetch_array($getrelatedItems))
     		{
+                $selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+                $rowpercentage = mysqli_fetch_array($selectPercentage);
+                $percentage = $rowpercentage['percentage'];
     			$relatedItems.='
                 <li class="item">
         			<div class="left-block">
@@ -62,7 +68,7 @@
         					</div>
         				</div>
         				<div class="content_price">
-        					<span class="price product-price">'.number_format($row['unityPrice']).'Rwf/ '.$row['unit'].'</span>
+        					<span class="price product-price">'.number_format(($row['unityPrice'] + (($percentage/100)*$row['unityPrice']))).'Rwf/ '.$row['unit'].'</span>
         				</div>
         			</div>
         		</li>
@@ -102,6 +108,9 @@
     	{
     		while($row = mysqli_fetch_array($getsamecompant))
     		{
+                $selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+                $rowpercentage = mysqli_fetch_array($selectPercentage);
+                $percentage = $rowpercentage['percentage'];
     			$samecompany.=' 
                 <li>
                     <div class="left-block">
@@ -124,7 +133,7 @@
                             </div>
                         </div>
                         <div class="content_price">
-                            <span class="price product-price">'.number_format($row['unityPrice']).'Rwf</span>
+                            <span class="price product-price">'.number_format(($row['unityPrice'] + (($percentage/100)*$row['unityPrice']))).'Rwf</span>
                         </div>
                     </div>
                 </li>
@@ -244,23 +253,16 @@
                             <div class="form-category dropdown">
                             <?php
                                 include ("db.php");
-                                $sql1 = $db->query("SELECT * FROM `productcategory`");
-                                echo'<select class="box-category">';
+                                $sql1 = $db->query("SELECT * FROM `levels` WHERE parentId = 0");
+                                echo'<select class="box-category">
+                                    <option>All Category</option>
+                                ';
+                                    
                                 while($row = mysqli_fetch_array($sql1)){
                                     $CatID = $row['catId'];
-                                    echo'<optgroup label="'.$row['catNane'].'"><option>All Category</option>';
-                                    $sql2 = $db->query("SELECT * FROM productsubcategory WHERE CatCode='$CatID'");
-                                    while($row = mysqli_fetch_array($sql2))
-                                    {
-                                        $subCatId = $row['subCatId'];
-                                        echo'<option>'.$row['subCatName'].'</option>';
-                                        $sql3 = $db->query("SELECT * FROM products WHERE subCatCode='$subCatId'");
-                                        while($row = mysqli_fetch_array($sql3)){
-                                            echo'<li>'.$row['productName'].'</li>';
-                                            }
-                                        echo'</ul></li>';
-                                    }
-                                        echo'</optgroup>';
+                                    echo'
+                                            <option value="'.$row['id'].'">'.$row['name'].'</option>
+                                    ';
                                 }
                                 echo'</select>';
 
@@ -314,11 +316,11 @@
                                        ?>
                                             <div data-toggle="modal" data-target="#<?php echo $agent['id'];?>" class="shipp-card" title="click for more information">
                                                 <div style="text-align: center;"><h2><?php echo $agent['username'];?></h2></div>
-                                                <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url('shipper/1.jpg'); background-size: cover; height: 90px; width: 90px; background-position: center;">
+                                                <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-size: cover; height: 90px; width: 90px; background-position: center;">
                                                 </div>
                                                 <div class="row" style="margin: 5px -10px;">
                                                     <div class="col-md-3">
-                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url('shipper/1.jpg'); background-repeat: no-repeat;background-position: center;"></div>
+                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
                                                     </div>
                                                     <div class="col-md-9">
                                                         <?php echo $agent['names'];?><br>
@@ -334,20 +336,17 @@
                                                 <div class="modal-content">
                                                   <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title"><?php echo $agent['title'];?></h4>
+                                                    <h4 class="modal-title"><?php echo $agent['names'];?></h4>
                                                   </div>
-                                                  <div class="modal-body">
-                                                    <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                    <div class="col-md-3"><img class="img-circle" src="assets/images/users/<?php echo $shipperId;?>.jpg"></div>
+                                                <div class="modal-body" style="position: relative; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-size: contain; height: 300px; background-position: center;">
+                                                </div>
+                                                  <div class="modal-footer" style="text-align: unset;">
                                                     <div class="col-md-9">
-                                                        <p style="text-align:left;">
-                                                            <b>Names: </b> <?php echo $agent['names'];?><br>
-                                                            <b>Contact: </b><?php echo $agent['phone'];?><br>
-                                                            <b>Address: </b> <?php echo $agent['adress'];?><br>
-                                                        </p>
+                                                        <strong>Name:</strong> <?php echo $agent['names'];?><br>
+                                                        <strong>Phone:</strong> <?php echo $agent['phone'];?><br>
+                                                        <strong>Location:</strong> <?php echo $agent['adress'];?>
                                                     </div>
+                                                    <div class="col-md-3"></div>
                                                     <hr>
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                   </div>
@@ -366,7 +365,7 @@
                         <div class="primary-box">
                             <!-- product-imge-->
                             <div class="product-image">
-                                <div class="product-img-thumb">
+                                <!-- <div class="product-img-thumb">
                                     <ul class="bxslider">
                                         <li class="item">
                                             <img data-zoom-image="products/<?php echo $postId;?>.jpg"  src="products/<?php echo $postId;?>.jpg" alt=""/> 
@@ -384,9 +383,9 @@
                                             <img data-zoom-image="products/<?php echo $postId;?>d.jpg" src="products/<?php echo $postId;?>d.jpg" alt=""/> 
                                         </li>
                                     </ul>
-                                </div>
+                                </div> -->
                                 <div class="product-full">
-                                    <img id="product-zoom" src="products/<?php echo $postId;?>.jpg" data-zoom-image="products/<?php echo $postId;?>.jpg" alt="product"/>
+                                    <img id="product-zoom" src="products/<?php echo $postId;?>.jpg" data-zoom-image="products/<?php echo $postId;?>.jpg" alt="<?php echo $postTitle;?>" style="width: 100%;" />
                                 </div>
                             </div>
                             <!-- product-imge-->
@@ -436,11 +435,11 @@
 
                             </div>
                             <div class="product-data">
-                                <p class="product-code">Product code: #<span><?php echo $postId;?></span></p>
+                                <p class="product-code">Product code: #<span><?php echo $productCode;?></span></p>
                                 <p class="product-tags">Product tags: 
                                     <a href=""><span><?php echo $catNane;?>,</span></a>
-                                    <a href=""><span><?php echo $subCatName;?>,</span></a>
                                     <a href=""><span><?php echo $productName;?></span></a>
+                                    <a href=""><span><?php echo $postTitle;?>,</span></a>
                                 </p>
                             </div>
                         </div>
@@ -600,7 +599,7 @@
                                                 </div>
                                                 <div class="row" style="margin: 5px -10px;">
                                                     <div class="col-md-3">
-                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(assets/images/users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-attachment: fixed;background-position: center;background-color: #33d09d;"></div>
+                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
                                                     </div>
                                                     <div class="col-md-9">
                                                         <?php echo $shipperInfo['names'];?><br>
@@ -622,8 +621,10 @@
                                                     <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
                                                   </div>
                                                   <div class="modal-footer">
-                                                    <div class="col-md-3"><img class="img-circle" src="assets/images/users/<?php echo $shipperId;?>.jpg"></div>
-                                                    <div class="col-md-9">
+                                                    <div class="col-md-5">
+                                                        <div style=" height: 200px;width: 200px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
+                                                    </div>
+                                                    <div class="col-md-7">
                                                         <p style="text-align:left;">
                                                             <b>Names: </b> <?php echo $shipperInfo['names'];?><br>
                                                             <b>Contact: </b><?php echo $shipperInfo['phone'];?><br>

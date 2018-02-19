@@ -71,12 +71,9 @@ if (isset($_GET['CatID'])) {
                                     if ($countResult > 0) {
                                         while($row = mysqli_fetch_array($sql2))
                                         {
-                                            $selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
-                                            $rowpercentage = mysqli_fetch_array($selectPercentage);
-                                            $percentage = $rowpercentage['percentage'];
                                             $postTitle = $row['itemName'];
                                             $priceStatus = $row['unit'];
-                                            $price = ($row['unityPrice'] + (($percentage/100)*$row['unityPrice']));
+                                            $price = $row['unityPrice'];
                                         ?>
                                         <li class="item col-md-4 itemheight">
                                             <div class="left-block">
@@ -100,7 +97,48 @@ if (isset($_GET['CatID'])) {
                                         }
                                     }
                                     else {
-                                        echo '<center><b style="padding: 100px">No product yet<b></center>';
+                                        $row = mysqli_fetch_array($sql2);
+                                        $newrecCatId = $row['id'];
+                                        $selectChild = $db -> query("SELECT * FROM levels WHERE parentId = '$newrecCatId'");
+                                        $childNum = mysqli_num_rows($selectChild);
+                                        while ($childNum > 0) {
+                                            $newrecCatId = $row['id'];
+                                            $selectChild = $db -> query("SELECT * FROM levels WHERE parentId = '$newrecCatId'");
+                                            $childNum = mysqli_num_rows($selectChild);
+                                            $sql3 = $db->query("SELECT itemId, itemName, productCode, quantity, unit,unityPrice,inDate, postedBy, itemCompanyCode, description, postDeadline, ncpp, id, name, parentId FROM `items1` JOIN `levels` WHERE `items1`.productCode = `levels`.id AND (id = '$newrecCatId' OR parentId = '$newrecCatId') AND quantity > 0 ORDER BY rand()");
+                                            $countResult = mysqli_num_rows($sql3);
+                                            if ($countResult > 0) {
+                                                while($row = mysqli_fetch_array($sql2))
+                                                {
+                                                    $postTitle = $row['itemName'];
+                                                    $priceStatus = $row['unit'];
+                                                    $price = $row['unityPrice'];
+                                                ?>
+                                                <li class="item col-md-4 itemheight">
+                                                    <div class="left-block">
+                                                        <a href="post.php?postId=<?php echo $row['itemId'];?>">
+                                                            <img class="img-responsive" alt="<?php echo $postTitle;?>" src="products/<?php echo $row['itemId'];?>.jpg"/>
+                                                        </a>
+                                                        <div class="add-to-cart">
+                                                            <a title="Add to Cart" href="post.php?postId=<?php echo"".$row['itemId']."";?>">View Product</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="right-block">
+                                                        <div class="left-p-info">
+                                                            <h5 class="product-name"><a href="post.php?postId=<?php echo"".$row['itemId']."";?>"><?php echo $postTitle;?></a></h5>
+                                                        </div>
+                                                        <div class="content_price">
+                                                            <span class="price product-price"><?php echo number_format($price);?> Rwf</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <?php
+                                                }
+                                            }
+                                        }
+                                        if ($childNum == 0)  {
+                                            echo '<center><b style="padding: 100px">No product yet<b></center>';
+                                        }
                                     }
 
                                     ?>

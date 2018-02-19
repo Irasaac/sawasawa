@@ -87,29 +87,22 @@ if (isset($_SESSION["username"]))
                                 </div>
     							
                                 <div class="form-category dropdown">
-    							<?php
-    								include ("db.php");
-    								$sql1 = $db->query("SELECT * FROM `productcategory`");
-    								echo'<select class="box-category">';
-    								while($row = mysqli_fetch_array($sql1)){
-    									$CatID = $row['catId'];
-    									echo'<optgroup label="'.$row['catNane'].'"><option>All Category</option>';
-    									$sql2 = $db->query("SELECT * FROM productsubcategory WHERE CatCode='$CatID'");
-    									while($row = mysqli_fetch_array($sql2))
-    									{
-    										$subCatId = $row['subCatId'];
-    										echo'<option>'.$row['subCatName'].'</option>';
-    										$sql3 = $db->query("SELECT * FROM products WHERE subCatCode='$subCatId'");
-    										while($row = mysqli_fetch_array($sql3)){
-    											echo'<li>'.$row['productName'].'</li>';
-    											}
-    										echo'</ul></li>';
-    									}
-    										echo'</optgroup>';
-    								}
-    								echo'</select>';
+                                <?php
+                                    include ("db.php");
+                                    $sql1 = $db->query("SELECT * FROM `levels` WHERE parentId = 0");
+                                    echo'<select class="box-category">
+                                        <option>All Category</option>
+                                    ';
+                                        
+                                    while($row = mysqli_fetch_array($sql1)){
+                                        $CatID = $row['catId'];
+                                        echo'
+                                                <option value="'.$row['id'].'">'.$row['name'].'</option>
+                                        ';
+                                    }
+                                    echo'</select>';
 
-    							?>
+                                ?>
                                 </div>
                                 <button type="submit" class="btn-search"></button>
                                 <div class="getresult" id="getresult"></div>
@@ -170,7 +163,7 @@ if (isset($_SESSION["username"]))
                                             </tr>
                                             <tr>
                                                 <td colspan="2"><strong>Total</strong></td>
-                                                <td><strong><?php echo number_format($cartTotal);?></strong></td>
+                                                <td><strong><?php echo number_format($cartTotal);?> Frw</strong></td>
                                             </tr>
                                         </tfoot>   
                                     </table>

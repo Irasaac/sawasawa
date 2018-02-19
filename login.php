@@ -25,10 +25,11 @@ if (isset($_POST['Signup']))
 	$pwd = $_POST['pwd'];
 	$names = $_POST['names'];
 	$phone = $_POST['phone'];
-	$email = $_POST['email'];
+    $email = $_POST['email'];
+	$location = $_POST['location'];
 	require '../db.php';
-	$sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`) 
-	VALUES ('$loginId', '$pwd', '$names', '$phone', '$email')");
+	$sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`, `adress`) 
+	VALUES ('$loginId', '$pwd', '$names', '$phone', '$email', '$location')");
 	$pid = mysqli_insert_id();
 	$_SESSION["id"] = $pid ;
 	$_SESSION["username"] = $loginId;
@@ -173,9 +174,14 @@ else{
                         <label for="email">E-mail</label>
                         <input class="md-input" type="text" id="email" name="email" />
                     </div>
-					<div class="uk-form-row">
+                    <div class="uk-form-row">
                         <label for="loginId">Phone</label>
                         <input class="md-input" type="text" id="phone" name="phone" />
+                    </div>
+
+					<div class="uk-form-row">
+                        <label for="location">Location</label>
+                        <input class="md-input" type="text" id="location" name="location" />
                     </div>
 
                     <input type="hidden" name="page" value="<?php echo $page;?>"/>

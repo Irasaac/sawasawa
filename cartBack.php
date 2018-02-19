@@ -114,12 +114,16 @@
 				$maxqty = $itemrow['quantity'];
 			}
 			$sql = $db->query("SELECT * FROM items1 WHERE itemId='$item_id' LIMIT 1");
+			$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+            $rowpercentage = mysqli_fetch_array($selectPercentage);
+            $percentage = $rowpercentage['percentage'];
 			while ($itemrow = mysqli_fetch_array($sql)) {
 				$product_name = $itemrow["itemName"];
+				$onWebprice = ($itemrow['unityPrice'] + (($percentage/100)*$itemrow['unityPrice']));
 				$price = $itemrow["unityPrice"];
 				$details = $itemrow["description"];
 			}
-			$pricetotal = $price * $each_item['quantity'];
+			$pricetotal = $onWebprice * $each_item['quantity'];
 			
 
 	error_reporting( 0 );
@@ -130,7 +134,7 @@
 			// Dynamic Checkout Btn Assembly
 			$x = $i + 1;
 			$pp_checkout_btn .= '<input type="hidden" name="item_name_' . $x . '" value="' . $product_name . '">
-	        <input type="hidden" name="amount_' . $x . '" value="' . $price . '">
+	        <input type="hidden" name="amount_' . $x . '" value="' . $onWebprice . '">
 	        <input type="hidden" name="quantity_' . $x . '" value="' . $each_item['quantity'] . '">  ';
 			// Create the product array variable
 			$product_id_array .= "$item_id-".$each_item['quantity'].","; 
@@ -146,7 +150,7 @@
 	                                                <p class="product-name"><a href="post.php?postId='.$item_id.'">'.$product_name.'</a></p>
 	                                                <small><a href="post.php?postId='.$item_id.'">'.$details.'</a></small><br>
 	                                            </td>';
-			$cartOutput .= '<td>' . $price . ' Rwf</td>';
+			$cartOutput .= '<td>' . number_format($onWebprice) . ' Rwf</td>';
 			$cartOutput .= '<td class="qty"><form action="cart.php" method="post">
 			
 	                                                <input class="option-product-qty" type="number" name="quantity" type="text" value="' . $each_item['quantity'] . '" min="1" max="'.$maxqty.'"/>
