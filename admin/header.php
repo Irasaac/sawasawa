@@ -40,7 +40,6 @@
                             <a href="#" class="user_action_image"><img class="md-user-image" src="assets/img/avatars/user.png" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="javascript:;">My profile</a></li>
                                     <li><a href="../logout.php">Logout</a></li>
                                 </ul>
                             </div>

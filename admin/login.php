@@ -20,21 +20,30 @@ elseif(!isset($_GET['page']))
 <?php
 if (isset($_POST['Signup']))
 {
-	$page = $_POST['page'];
-	$loginId = $_POST['loginId'];
-	$pwd = $_POST['pwd'];
-	$names = $_POST['names'];
-	$phone = $_POST['phone'];
-	$email = $_POST['email'];
-	require '../db.php';
-	$sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`) 
-	VALUES ('$loginId', '$pwd', '$names', '$phone', '$email')");
-	$pid = mysqli_insert_id($sql);
-	$_SESSION["id"] = $pid ;
-	$_SESSION["username"] = $loginId;
-	$_SESSION["password"] = $pwd;
-	header("location: ".$page."");
-	exit();	
+    $page = $_POST['page'];
+    $loginId = $_POST['loginId'];
+    $pwd = $_POST['pwd'];
+    $names = $_POST['names'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $location = $_POST['location'];
+    require '../db.php';
+    $sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`, `adress`) 
+    VALUES ('$loginId', '$pwd', '$names', '$phone', '$email', '$location')");
+    $pid = mysqli_insert_id($sql); 
+    $_SESSION["id"] = $pid ;
+    $_SESSION["username"] = $loginId;
+    $_SESSION["password"] = $pwd;
+    if ($_FILES['profile']['tmp_name'] != "") { 
+        $newname = ''.$userId.'.jpg';
+        move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
+    }
+    header("location: ".$page."");
+    exit();
+}
+if ($_FILES['profile']) { 
+    $newname = '1.jpg';
+    move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
 }
 if (isset($_POST['login'])){
 	
@@ -199,7 +208,17 @@ else{
                         <label for="loginId">Phone</label>
                         <input class="md-input" type="text" id="phone" name="phone" />
                     </div>
-
+                    <div class="uk-form-row">
+                        <label for="location">Location</label>
+                        <input class="md-input" type="text" id="location" name="location" />
+                    </div>
+                    <div class="uk-form-row">
+                        <label for="profile">Image</label>
+                        <div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
+                            Import image 
+                            <input required type="file" name="profile" id="profile"/> 
+                        </div>
+                    </div>
                     <input type="hidden" name="page" value="<?php echo $page;?>"/>
                     <div class="uk-margin-medium-top">
                         <input type="submit" value="Signup" name="Signup" class="md-btn md-btn-success md-btn-block md-btn-large" />

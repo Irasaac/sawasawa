@@ -84,6 +84,9 @@ if(isset($_GET['productId']))
 	$productId = $_GET['productId'];
 	include ("../db.php");
 	$sql = $db->query("SELECT * FROM `levels` WHERE id = '$productId'");
+	$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+	$rowpercentage = mysqli_fetch_array($selectPercentage);
+	$percentage = $rowpercentage['percentage'];
 	while($row = mysqli_fetch_array($sql))
 	{
 		$productName = $row['name'];
@@ -107,7 +110,7 @@ if(isset($_GET['productId']))
                             <div class="uk-form-row">
                                 <div class="md-input-wrapper md-input-filled">
                                 	<label for="unityPrice">Price</label>
-                                	<input required type="number" onkeyup="pricechange()" class="md-input" name="unityPrice" id="unityPrice">
+                                	<input required type="number" onkeyup="pricechange('.$percentage.')" class="md-input" name="unityPrice" id="unityPrice">
                                 	<span class="md-input-bar"></span>
                                 </div>
                                 <div class="md-input-wrapper md-input-filled">

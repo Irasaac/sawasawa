@@ -95,6 +95,11 @@ if ($existCount > 0) {
 									<span class="md-input-bar "></span>
 								</div>
 								<div class="md-input-wrapper">
+									<label>Location</label>
+									<input type="text" class="md-input" name="Location" id="Location">
+									<span class="md-input-bar "></span>
+								</div>
+								<div class="md-input-wrapper">
 									<label>Password</label>
 									<input type="text" class="md-input" name="password" id="password">
 									<span class="md-input-bar "></span>
@@ -243,6 +248,11 @@ function insertUser()
         alert("password must be filled out");
         return false;
     }
+	var Location = document.getElementById('Location').value;
+	if (Location == null || Location == "") {
+        alert("Location must be filled out");
+        return false;
+    }
 	
 	//document.getElementById('tempTable').innerHTML = '';
 		$.ajax({
@@ -258,7 +268,7 @@ function insertUser()
 				account_type : account_type,
 				Username : Username,
 				Password : password,
-				
+				Location : Location
 				
 			},
 			success : function(html, textStatus){
@@ -327,6 +337,11 @@ function updateUser()
         alert("Epassword must be filled out");
         return false;
     }
+	var ELocation = document.getElementById('ELocation').value;
+	if (ELocation == null || ELocation == "") {
+        alert("ELocation must be filled out");
+        return false;
+    }
 	var Eid = document.getElementById('Eid').value;
 	if (Eid == null || Eid == "") {
         alert("Eid must be filled out");
@@ -348,8 +363,7 @@ function updateUser()
 				Eaccount_type : Eaccount_type,
 				Eusername : Eusername,
 				Epassword : Epassword,
-				
-				
+				ELocation : ELocation,
 			},
 			success : function(html, textStatus){
 				$("#listTable").html(html);

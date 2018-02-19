@@ -37,10 +37,10 @@
                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="assets/img/avatars/avatar_11_tn.png" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="../users/<?php echo $thisid ?>.jpg" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
-                                    <li><a href="page_user_profile.html">My profile</a></li>
+                                    <li><a href="editprofile.php">Edit profile</a></li>
                                     <li><a href="../logout.php">Logout</a></li>
                                 </ul>
                             </div>

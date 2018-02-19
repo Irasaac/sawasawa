@@ -322,9 +322,10 @@ if(isset($_GET['salerUsername']))
 	$salerEmail = $_GET['salerEmail'];
 	$salerUsername = $_GET['salerUsername'];
 	$salerPassword = $_GET['salerPassword'];
+	$salerLocation = $_GET['salerLocation'];
 	$sql = $db->query("
-	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`) 
-	VALUES ('$salerUsername', '$salerPassword', '$salerName', '$salerPhone', '$salerEmail', 'saler')
+	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`, `adress`) 
+	VALUES ('$salerUsername', '$salerPassword', '$salerName', '$salerPhone', '$salerEmail', 'saler', '$salerLocation')
 	")or die (mysqli_error());
 	// if($sql){echo "string";} else {echo "dfghj";}
 	if($sql){echo'<script>(function(){ bringTable("saler");})();	</script>';}
@@ -339,9 +340,10 @@ if(isset($_GET['Username']))
 	$account_type = $_GET['account_type'];
 	$Username = $_GET['Username'];
 	$Password = $_GET['Password'];
+	$Location = $_GET['Location'];
 	$sql = $db->query("
-	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`) 
-	VALUES ('$Username', '$Password', '$Name', '$Phone', '$Email', '$account_type')
+	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`,adress) 
+	VALUES ('$Username', '$Password', '$Name', '$Phone', '$Email', '$account_type', '$Location')
 	")or die (mysqli_error());
 	// if($sql){echo "string";} else {echo "dfghj";}
 	if($sql){echo'<script>(function(){ bringTable("'.$account_type.'");})();	</script>';}
@@ -383,6 +385,11 @@ if(isset($_GET['editUser']))
 				<input type="text" class="md-input" name="Epassword" id="Epassword" value="'.$row['pwd'].'">
 				<span class="md-input-bar "></span>
 			</div>
+			<div class="md-input-wrapper">
+				<label>Location</label>
+				<input type="text" class="md-input" name="ELocation" id="ELocation" value="'.$row['adress'].'">
+				<span class="md-input-bar "></span>
+			</div>
 			<button onclick="updateUser()" class="md-btn md-btn-success">UPDATE</button>
 		';
 	}
@@ -397,8 +404,9 @@ if(isset($_GET['Eusername']))
 	$account_type = $_GET['Eaccount_type'];
 	$username = $_GET['Eusername'];
 	$password = $_GET['Epassword'];
+	$Location = $_GET['ELocation'];
 	
-	$sql = $db->query("UPDATE users SET loginId= '$username', pwd= '$password', names= '$name', phone= '$Phone', email = '$Email', account_type= '$account_type' WHERE id='$id'")or die (mysqli_error());
+	$sql = $db->query("UPDATE users SET loginId= '$username', pwd= '$password', names= '$name', phone= '$Phone', email = '$Email', account_type= '$account_type', adress = '$Location' WHERE id='$id'")or die (mysqli_error());
 	
 	echo'<script>(function(){ bringTable("'.$account_type.'");})();	</script>';
 }
@@ -419,7 +427,7 @@ if(isset($_GET['bringTable']))
 				<th>#</th>
 				<th>names</th>
 				<th>phone</th>
-				<th>email</th>
+				<th>Location</th>
 				<th>Actions</th>
 			</thead>
 			<tbody>';
@@ -437,7 +445,7 @@ if(isset($_GET['bringTable']))
 						<td>'.$n.'</td>
 						<td>'.$row['names'].'</td>
 						<td>'.$row['phone'].'</td>
-						<td>'.$row['email'].'</td>
+						<td>'.$row['adress'].'</td>
 						<td><a href="javascript:void()" onclick ="editUser(userId= '.$row['id'].')">Edit</a> / <a href="javascript:void()" onclick="removeuser(userId= '.$row['id'].')">Remove</a></td>
 					</tr>';
 				}

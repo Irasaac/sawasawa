@@ -172,6 +172,9 @@ if ($existCount > 0) {
 					}
 					elseif($companyType=="Saler")
 					{
+						$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+						$rowpercentage = mysqli_fetch_array($selectPercentage);
+						$percentage = $rowpercentage['percentage'];
 						$sql2 = $db->query("SELECT * FROM `items1` WHERE postedBy = '$username' ORDER BY itemId DESC")or die (mysqli_error());
 						$countItems = mysqli_num_rows($sql2);
 						if($countItems > 0)
@@ -183,7 +186,7 @@ if ($existCount > 0) {
 								$priceStatus = $row['unit'];
 								$postDeadline = $row['postDeadline'];
 								$price = number_format($row['unityPrice']);
-								$webPrice = number_format($row['unityPrice'] + ((10/100)*$row['unityPrice']));
+								$webPrice = number_format($row['unityPrice'] + (($percentage/100)*$row['unityPrice']));
 								
 								$sqlprice = $db->query("SELECT * FROM bids WHERE itemCode = '$itemId' ORDER BY transactionID DESC");
 								$rowprice = mysqli_fetch_array($sqlprice);
@@ -206,7 +209,7 @@ if ($existCount > 0) {
 											</div>
 											<div class="md-card-content">
 												<h4 class="heading_c uk-margin-bottom">
-													<span class="sub-heading">Current Price: '.$webPrice.' Rwf</span>
+													<span class="sub-heading">On web Price: '.$webPrice.' Rwf</span>
 													Ending: '.$postDeadline.'
 												</h4>
 												<a class="md-btn md-btn-primary md-btn-mini md-btn-wave-light waves-effect waves-button waves-light" href="userPost.php?postId='.$row['itemId'].'">More
@@ -491,26 +494,27 @@ function changelocation() {
 		}
 	});
 	$.ajax({
-			type : "GET",
-			url : "userscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				productId : locationId,
-			},
-			success : function(html, textStatus){
-				$("#new_post_show").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
+		type : "GET",
+		url : "userscript.php",
+		dataType : "html",
+		cache : "false",
+		data : {
+			
+			productId : locationId,
+		},
+		success : function(html, textStatus){
+			$("#new_post_show").html(html);
+		},
+		error : function(xht, textStatus, errorThrown){
+			alert("Error : " + errorThrown);
+		}
 	});
 }
-function pricechange(webp=500) {
+function pricechange(percentage) {
 	var unityPrice = document.getElementById('unityPrice').value;
-	newwebprice = (webp + unityPrice);
-	document.getElementById('onwebunityPrice').value = unityPrice;
+	var Price = Number(unityPrice);
+	newwebprice = (Price + ((percentage/100)*unityPrice));
+	document.getElementById('onwebunityPrice').value = Math.round(newwebprice);
 }
 </script>
 </body>

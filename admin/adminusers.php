@@ -79,6 +79,11 @@ if ($existCount > 0) {
 									<input type="text" class="md-input" name="password" id="password">
 									<span class="md-input-bar "></span>
 								</div>
+								<div class="md-input-wrapper">
+									<label>Location</label>
+									<input type="text" class="md-input" name="Location" id="Location">
+									<span class="md-input-bar "></span>
+								</div>
 								<button onclick="insertSaler()"  class="md-btn md-btn-success">Add</button>
 							</div>
 								
@@ -219,6 +224,11 @@ function insertSaler()
         alert("password must be filled out");
         return false;
     }
+	var Location = document.getElementById('Location').value;
+	if (Location == null || Location == "") {
+        alert("Location must be filled out");
+        return false;
+    }
 	
 	// //document.getElementById('tempTable').innerHTML = '';
 	$.ajax({
@@ -233,6 +243,7 @@ function insertSaler()
 				salerEmail : Email,
 				salerUsername : Username,
 				salerPassword : password,
+				salerLocation : Location,
 			
 			},
 			success : function(html, textStatus){
@@ -302,6 +313,11 @@ function updateUser()
         alert("Epassword must be filled out");
         return false;
     }
+	var ELocation = document.getElementById('ELocation').value;
+	if (ELocation == null || ELocation == "") {
+        alert("ELocation must be filled out");
+        return false;
+    }
 	var Eid = document.getElementById('Eid').value;
 	if (Eid == null || Eid == "") {
         alert("Eid must be filled out");
@@ -323,8 +339,7 @@ function updateUser()
 				Eaccount_type : Eaccount_type,
 				Eusername : Eusername,
 				Epassword : Epassword,
-				
-				
+				ELocation : ELocation,
 			},
 			success : function(html, textStatus){
 				$("#listTable").html(html);

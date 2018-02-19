@@ -273,6 +273,9 @@ if(isset($_GET['postId']))
 			$WeightLimit = $row['WeightLimit'];
 			$pricepkilo = $row['pricepkilo'];
 			$shipperId = $row['shipperId'];
+			$selectCompany = $db->query("SELECT * FROM company1 WHERE companyUserCode = '$shipperId'");
+			$company = mysqli_fetch_array($selectCompany);
+			$companyName = $company['companyName'];
 		}
 	?>
 		<?php include'userheader.php' ;?>
@@ -296,127 +299,38 @@ if(isset($_GET['postId']))
 		                        <div class="md-card-content">
 									<div id="dynamiclist">
 										<table width="100%" cellpadding="5">
-											<tr><td><a href="shipper/<?php echo $shippingId;?>.jpg"><img src="../shipper/<?php echo $shippingId;?>.jpg" width="300"/></a></td></tr>
+											<tr><td><a href="shipper/<?php echo $carId;?>.jpg"><img src="../shipper/<?php echo $carId;?>.jpg" width="300"/></a></td></tr>
 											<tr><td>
 													<div id="loadedit">
 														<form action="userpost.php" method="post" enctype="multipart/form-data">
 															<input id="postId" name="postId" value="<?php echo $postId;?>" hidden>
 															<div class="uk-form-row">
-					                                            <label for="postTitle">Product Name</label>
-					                                            <input id="postTitle" name="postTitle" class="md-input"  value="<?php echo $postTitle;?>">
+					                                            <label for="carType">Car Type</label>
+					                                            <input id="carType" name="carType" class="md-input"  value="<?php echo $title;?>">
+					                                            <input id="carId" name="carId" class="md-input"  value="<?php echo $carId;?>" hidden>
 					                                        </div>
 															<div class="uk-form-row">
 					                                            <div class="uk-input-group">
-									                                <label for="price">Starting Price</label>
-					                                           		<input id="price" name="price" class="md-input" value="<?php echo $price;?>">
+									                                <label for="price">Price Per Kilometer</label>
+					                                           		<input id="pricepkilo" name="pricepkilo" class="md-input" value="<?php echo $pricepkilo;?>">
 					                                           		<span class="uk-input-group-addon">Rwf</span>
 					                                        	</div>
 					                                        </div>
 															<div class="uk-form-row">
-					                                            <label for="quantity">Quantity</label>
-					                                            <input id="quantity" name="quantity" class="md-input" value="<?php echo $quantity;?>">
+					                                            <label for="quantity">Maximum Quantity</label>
+					                                            <input id="WeightLimit" name="WeightLimit" class="md-input" value="<?php echo $WeightLimit;?>">
 					                                        </div>
 															<div class="uk-form-row">
-					                                            <label for="postedBy">Product Owner</label>
-					                                            <input id="postedBy" name="postedBy" class="md-input" value="<?php echo $postedBy;?>" disabled>
+					                                            <label for="postedBy">Car Owner</label>
+					                                            <input id="postedBy" name="postedBy" class="md-input" value="<?php echo $companyName;?>" disabled>
 					                                        </div>
-					                                        <div class="uk-form-row">
-					                                            <label for="productLocation">Started On</label>
-					                                            <input type="date" id="productLocation" name="productLocation" class="md-input" value="<?php echo $postedDate;?>" disabled>
-					                                        </div>
-					                                        <div class="uk-form-row">
-					                                            <label for="postedDate">Ending On</label>
-					                                            <input type="date" id="postedDate" name="postedDate" class="md-input" value="<?php echo $productLocation;?>" disabled>
-					                                        </div>
-					                                        <div class="uk-form-row">
-					                                            <label for="postDesc">Product Description</label>
-					                                            <textarea id="postDesc" name="postDesc" class="md-input"> <?php echo $postDesc;?> </textarea>
-					                                        </div>
-					                                        <input type="submit" class="md-btn md-btn-success" value="Modify" name="modify">
+					                                        <input type="submit" class="md-btn md-btn-success" value="Change" name="Change">
 														</form>
 													</div>
 												</td>
 											</tr>
 										</table>
 									</div>
-								</div>
-		                    </div>
-		                </div>
-						<div>
-		                    <div class="md-card">
-		                        <div class="md-card-toolbar">
-		                            <div class="md-card-toolbar-actions">
-		                                <i class="md-icon material-icons md-card-fullscreen-activate">&#xE5D0;</i>
-		                            </div>
-		                            <h3 class="md-card-toolbar-heading-text">
-		                                Comments
-		                            </h3>
-		                        </div>
-		                        <div class="md-card-content">
-								<table width="100%">
-									<?php 
-									include ("../db.php");
-									$n=0;
-									$sql4 = $db->query("SELECT * FROM `postscomments` WHERE postCode='$postId' ORDER by commentId DESC") or die(mysqli_error());
-									$contcomments = mysqli_num_rows($sql4);
-									if($contcomments > 0){
-										while($row = mysqli_fetch_array($sql4)){
-											$n++;
-											$commentCode=$row['commentId'];
-										echo'<tr>
-											<td>'.$n.'. Comment: '.$row['commentNote'].'</td>
-										</tr>
-										<tr>
-											<td><i>By:'.$row['commentBy'].'</i> <div id="reply'.$row['commentId'].'"><i><a href="javascript:void()" onclick="reply(commentId='.$row['commentId'].', postCode='.$postId.')">Reply</a></i></div></td>
-										</tr>';
-										$f=0;
-										$sql5 = $db->query("SELECT * FROM `commentreplies` WHERE commentCode='$commentCode' ORDER by replyID DESC") or die(mysqli_error());
-										while($row = mysqli_fetch_array($sql5))
-											{
-												$f++;
-												echo'<tr><td>.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$f.' <b>'.$row['replyBy'].'</b>: '.$row['replyNotes'].'</td></tr> ';
-											}
-										echo'<tr>
-											<td><hr/></td>
-										</tr>';
-										}
-									}else{
-										echo'Opps! you have no comment on '.$postTitle.' yet';
-									}
-									?>
-								</table>
-										
-								</div>
-		                    </div>
-		                </div>
-						<div>
-		                    <div class="md-card">
-		                        <div class="md-card-toolbar">
-		                            <div class="md-card-toolbar-actions">
-		                                <i class="md-icon material-icons md-card-fullscreen-activate">&#xE5D0;</i>
-		                            </div>
-		                            <h3 class="md-card-toolbar-heading-text">
-		                                Bids
-		                            </h3>
-		                        </div>
-		                        <div class="md-card-content">
-		                        	<?php 
-		                        		include '../db.php';
-										$sqlbids = $db->query("SELECT * FROM bids WHERE itemCode = '$postId' ORDER BY transactionID DESC")or mysqli_error();
-										$nbid = 0;
-										$contbids = mysqli_num_rows($sqlbids);
-										if($contbids > 0){
-											While($row = mysqli_fetch_array($sqlbids)){
-												$nbid++;
-												$customerName = $row['customerName'];
-												$customerRef = $row['customerRef'];
-												$trUnityPrice = number_format($row['trUnityPrice']);
-												echo $nbid.'. Bid: '.$trUnityPrice.'Rwf, From: '.$customerName.', Phone: '.$customerRef.' <hr/>';
-											}
-										}else{
-										echo'Opps! you have no bid on '.$postTitle.' yet';
-									}
-									?>		
 								</div>
 		                    </div>
 		                </div>
@@ -447,6 +361,21 @@ if(isset($_GET['postId']))
 			</script>
 		<?php
 	}
+
+	// CHANGE CAR
+	if (isset($_POST['Change'])) {
+		$carType = $_POST['carType'];
+		$carId = $_POST['carId'];
+		$WeightLimit = $_POST['WeightLimit'];
+		$pricepkilo = $_POST['pricepkilo'];
+		$updateCar = $db ->query("UPDATE shipper SET title = '$carType', WeightLimit = '$WeightLimit', pricepkilo = '$pricepkilo' WHERE shippingId = '$carId'");
+		?>
+			<script type="text/javascript">
+				document.location.href = "items.php";
+			</script>
+		<?php
+	}
+
 ?>
 
 <!doctype html>
