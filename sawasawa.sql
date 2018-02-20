@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2018 at 01:44 PM
+-- Generation Time: Feb 20, 2018 at 01:21 PM
 -- Server version: 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -47,6 +47,26 @@ CREATE TABLE `bids` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `charges`
+--
+
+CREATE TABLE `charges` (
+  `chargeId` int(11) NOT NULL,
+  `percentage` int(5) NOT NULL,
+  `chargedFrom` enum('saler','shipper','agent','') NOT NULL,
+  `description` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `charges`
+--
+
+INSERT INTO `charges` (`chargeId`, `percentage`, `chargedFrom`, `description`) VALUES
+(1, 5, 'saler', 'percentage of product on web');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `commentreplies`
 --
 
@@ -58,15 +78,6 @@ CREATE TABLE `commentreplies` (
   `visibilityStatus` enum('Private','All users','Public') NOT NULL,
   `commentCode` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `commentreplies`
---
-
-INSERT INTO `commentreplies` (`replyID`, `replyNotes`, `replyBy`, `replyDatetime`, `visibilityStatus`, `commentCode`) VALUES
-(1, 'tx', 'alan', '2018-01-29 13:29:26', 'Public', 2),
-(2, 'Just call the shipper', 'nana', '2018-02-03 15:01:30', 'Public', 4),
-(3, 'Just Call', 'eric1', '2018-02-03 17:51:18', 'Public', 5);
 
 -- --------------------------------------------------------
 
@@ -93,14 +104,8 @@ CREATE TABLE `company1` (
 --
 
 INSERT INTO `company1` (`businessType`, `companyType`, `companyId`, `companyDescription`, `companyName`, `companyTin`, `cumpanyUserCode`, `latitude`, `longitude`, `location`, `dateIn`) VALUES
-('Transport', 'Shipper', 8, 'this company transports goods', 'ShipperCompany', '3498kjfds', 24, '', '', '10200', '2017-05-31 15:58:13'),
-('All', 'Saler', 9, 'Nothing', 'Testiing COmp', '32879', 25, '', '', '102090111', '2017-05-31 17:10:36'),
-('Transport', 'Shipper', 11, 'REACT', 'Aizo Company LTD', '1234', 23, '', '', '205140305', '2017-11-27 15:55:11'),
-('Technology', 'Saler', 12, 'innovation technology solution', 'Itech LTD', '0037', 28, '', '', '102100301', '2017-11-27 15:38:47'),
-('Transport', 'Shipper', 13, 'Real time, security product transport', 'Shipping United', '1000', 27, '', '', '102100301', '2017-11-28 07:20:35'),
-('Agriculture', 'Saler', 14, 'Agriculture for global market', 'Agrotec LTD', '2000', 17, '', '', '205140305', '2018-02-07 10:57:21'),
-('Agriculture', 'Saler', 17, 'We do agriculture in africa', 'Berwa Shop', '123456789', 6, '', '', '0', '2018-02-07 10:57:08'),
-('Food', 'Saler', 18, 'Company description', 'Free agry', '124576', 33, '', '', '102070103', '2018-02-03 17:46:28');
+('transport', 'Shipper', 1, 'safe and quick transport', 'IS LTD', '', 1, '', '', '', '2018-02-18 14:16:49'),
+('Commercial', 'Saler', 2, 'Uko wambaye nibyo biguha agaciro', 'Berwa', '', 4, '', '', '0', '2018-02-18 14:21:03');
 
 -- --------------------------------------------------------
 
@@ -187,22 +192,7 @@ CREATE TABLE `items1` (
 --
 
 INSERT INTO `items1` (`itemId`, `itemName`, `productCode`, `quantity`, `unit`, `unityPrice`, `inDate`, `postedBy`, `itemCompanyCode`, `description`, `postDeadline`, `ncpp`) VALUES
-(18, 'Chair', 207070109, 1, 'PC', 20000, '2018-02-02 07:39:41', 'qw', 2, 'A good chair', '2017-11-28', 9),
-(19, 'Computer Lenovo', 207070115, 15, 'PC', 250000, '2018-02-07 13:02:35', 'Irasaac', 12, '', '2017-11-30', 44),
-(20, 'Iphone 7', 207070115, 40, 'PC', 230000, '2018-02-05 18:06:07', 'Irasaac', 12, 'Good ios mobile for low price', '2018-02-24', 43),
-(29, 'Speaker', 207070115, 50, '', 5000, '2018-02-09 17:52:37', 'irasaac', 12, 'Good speaker wirelessly', '2017-12-20', 38),
-(31, 'Macbook pro', 207070115, 25, '', 1000000, '2018-02-10 15:37:52', 'irasaac', 12, 'Apple product', '2017-12-12', 67),
-(11, 'Komprasor', 207070104, 3, 'KG', 4000000, '2018-02-05 17:18:54', 'new', 6, 'this car is very nice', '2017-05-30', 111),
-(36, 'Jumper', 207070108, 110, '', 15000, '2018-02-07 13:26:39', 'nana', 17, ' good jumper ', '0000-00-00', 6),
-(35, 'T-shirt', 207070108, 50, '', 5000, '2018-02-09 12:08:23', 'nana', 17, '    good t-shirt    ', '0000-00-00', 24),
-(34, 'Table', 207070109, 2, '', 500000, '2018-02-03 17:51:21', 'eric1', 18, 'Our tale isgood', '2018-02-28', 4),
-(25, 'Beans', 2, 1000, 'KG', 350, '2018-02-03 16:32:06', 'alan', 14, 'Good beans!', '2017-12-30', 31),
-(26, 'Marakuja', 207070117, 1000, 'KG', 400, '2018-02-09 19:56:44', 'alan', 14, '', '2017-12-30', 32),
-(27, 'Egg plant', 207070110, 1000, 'KG', 500, '2018-02-07 10:55:32', 'alan', 14, 'Make your food perfect!', '2017-12-30', 50),
-(24, 'Headphone', 207070115, 20, 'PC', 3000, '2018-02-10 15:35:54', 'irasaac', 12, 'Sony product. wirelessly  headphone', '2017-12-31', 36),
-(22, 'Macbook air', 207070115, 15, 'PC', 1000000, '2018-02-05 18:02:14', 'Irasaac', 12, 'Good computer from apple', '2017-11-28', 92),
-(37, 'Hat', 207070108, 200, '', 1500, '2018-02-09 17:45:13', 'nana', 17, 'good hat  from black pyramid. Rainproof and Windpr', '0000-00-00', 4),
-(41, '$PostTitle', 12, 0, 'dfsgfd', 0, '2018-02-06 09:50:50', 'dfdfv', 23213, '$PostDesc', '0000-00-00', 13414);
+(1, 'Jumper', 207070105, 1000, '', 8000, '2018-02-18 14:30:56', 'aizo', 2, 'this jumper from black pyramid.', '2018-02-28', 6);
 
 -- --------------------------------------------------------
 
@@ -227,10 +217,6 @@ CREATE TABLE `levels` (
 INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (1, 'Cars', 0, '2017-05-04 08:36:54', 1, '0000-00-00', 0),
 (2, 'Food', 0, '2017-05-04 08:47:07', 1, '0000-00-00', 0),
-(3, 'BMW', 1, '2017-05-04 08:49:07', 1, '0000-00-00', 0),
-(4, 'Benz', 1, '2017-05-04 09:17:27', 1, '0000-00-00', 0),
-(5, 'Tesla', 3, '2017-05-04 09:25:08', 1, '0000-00-00', 0),
-(6, 'testit', 2, '2017-05-04 17:21:49', 0, '0000-00-00', 0),
 (3061300, '-- Select Cell --', 30613, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (3061301, 'Bigoga', 30613, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (3061302, 'Bugarura', 30613, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -900,11 +886,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (102050201, 'Agakenke', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050202, 'Agatare', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050203, 'Akinyana', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(102050204, 'Gikingo', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(102050204, 'Gikingo', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050205, 'Gitega', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050206, 'Gitenga', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(102050207, 'Nyakabingo', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(102050207, 'Nyakabingo', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (102050208, 'Nyarurama', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050209, 'Rugogwe', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (102050210, 'Taba', 1020502, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -1570,11 +1556,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (103100101, 'Akindege', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100102, 'Indatwa', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100103, 'Intwari', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(103100104, 'Kabagendwa', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(103100104, 'Kabagendwa', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100105, 'Kibaya', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100106, 'Mukoni', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(103100107, 'Mulindi', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(103100107, 'Mulindi', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (103100108, 'Umucyo', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100109, 'Uruhongore', 1031001, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (103100201, 'Gasaraba', 1031002, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -2239,11 +2225,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (202060405, 'Kibumba', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060406, 'Mutori', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060407, 'Nyamirama', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(202060408, 'Ruhamagariro', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(202060408, 'Ruhamagariro', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060409, 'Shyembe', 2020604, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060501, 'Gatare', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(202060502, 'Gatoke', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(202060502, 'Gatoke', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (202060503, 'Kayenzi', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060504, 'Kigangazi', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (202060505, 'Murama', 2020605, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -2909,11 +2895,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (204020109, 'Nyarwumba', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020110, 'Rugerero', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020111, 'Rwankoni', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(204020112, 'Rwaza', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(204020112, 'Rwaza', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020113, 'Shuni', 2040201, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020201, 'Gatongati', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(204020202, 'Kamutima', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(204020202, 'Kamutima', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (204020203, 'Karuhinda', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020204, 'Kigarama', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (204020205, 'Kinyana', 2040202, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -3579,11 +3565,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (205070104, 'Kivumu', 2050701, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070105, 'Munazi', 2050701, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070106, 'Nyabusozi', 2050701, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(205070201, 'Kasebuturanyi', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(205070201, 'Kasebuturanyi', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070202, 'Kirwa', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070203, 'Muyange', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(205070204, 'Nyakibyeyi', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(205070204, 'Nyakibyeyi', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (205070205, 'Uwinyana', 2050702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070301, 'Gasharu', 2050703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (205070302, 'Muduha', 2050703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -4248,11 +4234,11 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (206070205, 'Rubona', 2060702, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070301, 'Bugaramantare', 2060703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070302, 'Gakomeye', 2060703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(206070303, 'Gitwa', 2060703, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
-INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
+(206070303, 'Gitwa', 2060703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070304, 'Nyarusange', 2060703, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070401, 'Gisiza', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(206070402, 'Gitaraga', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
+(206070402, 'Gitaraga', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0);
+INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `updatedDate`, `updatedBy`) VALUES
 (206070403, 'Kabacuzi', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070404, 'Kaburinga', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (206070405, 'Kamuganga', 2060704, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
@@ -4637,22 +4623,13 @@ INSERT INTO `levels` (`id`, `name`, `parentId`, `createdDate`, `createdBy`, `upd
 (207060604, 'Ryaruyange', 2070606, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (207070101, 'Munyinya', 2070701, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
 (207070102, 'Muzamuzi', 2070701, '2017-05-06 08:31:33', 0, '0000-00-00', 0),
-(207070103, 'Model X', 5, '2017-05-06 14:37:25', 1, '0000-00-00', 0),
 (207070104, 'C Class', 4, '2017-05-18 16:27:50', 0, '0000-00-00', 0),
 (207070105, 'Cloths', 0, '2017-05-18 17:42:55', 1, '0000-00-00', 0),
-(207070106, 'Kids', 207070105, '2017-05-18 17:43:01', 1, '0000-00-00', 0),
 (207070107, 'Shoes', 207070106, '2017-05-18 17:43:09', 1, '0000-00-00', 0),
-(207070108, 'Men', 207070105, '2017-05-18 17:43:19', 1, '0000-00-00', 0),
 (207070109, 'Furniture', 0, '2017-05-31 17:07:46', 1, '0000-00-00', 0),
-(207070110, 'Vegetables', 0, '2017-05-31 17:07:51', 1, '0000-00-00', 0),
 (207070111, 'Animals', 0, '2017-05-31 17:08:13', 1, '0000-00-00', 0),
-(207070112, 'Gifts', 0, '2017-05-31 17:08:17', 1, '0000-00-00', 0),
-(207070113, 'Cow', 207070111, '2017-05-31 17:21:17', 1, '0000-00-00', 0),
-(207070114, 'Technology', 207070111, '2017-11-27 14:56:39', 0, '0000-00-00', 0),
 (207070115, 'Technology', 0, '2017-11-27 14:57:27', 28, '0000-00-00', 0),
-(207070116, '', 6, '2017-12-02 15:07:10', 0, '0000-00-00', 0),
-(207070117, 'Fruits', 0, '2017-12-02 15:07:32', 17, '0000-00-00', 0),
-(207070118, 'Male', 207070107, '2018-02-03 17:58:18', 1, '0000-00-00', 0);
+(207070116, '', 6, '2017-12-02 15:07:10', 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -10928,16 +10905,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`orderId`, `trackingCode`, `itemCode`, `itemCompanyCode`, `quantity`, `customerCode`, `orderDate`, `orderStatus`, `latitude`, `longitude`, `address`, `unityPrice`, `TotalPrice`) VALUES
-(1, '1', 36, 17, 1.00000, 63, '2018-02-07 10:45:25', 'Shipped', '', '', 'dsgsgsaazf', 15000, 15000),
-(2, '1', 37, 17, 1.00000, 63, '2018-02-07 10:46:00', 'Shipped', '', '', 'dsgsgsaazf', 1500, 1500),
-(3, '1', 35, 17, 1.00000, 63, '2018-02-07 10:45:56', 'Shipped', '', '', 'dsgsgsaazf', 5000, 5000),
-(4, '1', 31, 12, 1.00000, 63, '2018-02-07 10:49:11', 'Shipped', '', '', 'dsgsgsaazf', 1000000, 1000000),
-(5, '1', 24, 12, 1.00000, 63, '2018-02-07 10:49:01', 'Shipped', '', '', 'dsgsgsaazf', 3000, 3000),
-(6, '6', 37, 17, 1.00000, 28, '2018-02-07 10:55:09', 'Shipped', '', '', 'french, rue-201, paris a monaco', 1500, 1500),
-(7, '6', 36, 17, 1.00000, 28, '2018-02-07 10:54:52', 'Shipped', '', '', 'french, rue-201, paris a monaco', 15000, 15000),
-(8, '6', 19, 12, 1.00000, 28, '2018-02-07 10:53:51', 'Pending', '', '', 'french, rue-201, paris a monaco', 250000, 250000),
-(9, '9', 24, 12, 1.00000, 5, '2018-02-10 15:38:50', 'Pending', '-2.0899857', '29.749774900000034', 'Muhanga Regional Stadium, Gitarama, Rwanda', 3000, 3000),
-(10, '9', 31, 12, 1.00000, 5, '2018-02-10 15:38:50', 'Pending', '-2.0899857', '29.749774900000034', 'Muhanga Regional Stadium, Gitarama, Rwanda', 1000000, 1000000);
+(1, '1', 1, 2, 1.00000, 4, '2018-02-18 14:33:21', 'Shipped', '', '', 'french, rue-201, paris a monaco', 8000, 8000);
 
 -- --------------------------------------------------------
 
@@ -10996,17 +10964,6 @@ CREATE TABLE `postscomments` (
   `visibilityStatus` enum('Private','All users','Public') NOT NULL,
   `postCode` bigint(20) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `postscomments`
---
-
-INSERT INTO `postscomments` (`commentId`, `commentNote`, `commentBy`, `commentDatetime`, `visibilityStatus`, `postCode`) VALUES
-(1, 'testing my mac book air', 'alan', '2018-01-14 18:15:56', 'Public', 22),
-(2, 'cool', 'jin', '2018-01-25 07:44:03', 'Public', 27),
-(3, 'really? amazing', 'alan', '2018-02-02 12:18:05', 'Public', 20),
-(4, 'How do we get it first?', 'nana', '2018-02-03 15:01:07', 'Public', 33),
-(5, 'How do we get it', 'eric1', '2018-02-03 17:50:22', 'Public', 34);
 
 -- --------------------------------------------------------
 
@@ -11109,22 +11066,15 @@ CREATE TABLE `shipper` (
   `title` varchar(200) NOT NULL,
   `WeightLimit` int(11) NOT NULL,
   `pricepkilo` int(11) NOT NULL,
-  `shipperId` int(11) NOT NULL,
-  `latitude` varchar(200) NOT NULL,
-  `longitude` varchar(200) NOT NULL,
-  `address` varchar(200) NOT NULL
+  `shipperId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `shipper`
 --
 
-INSERT INTO `shipper` (`shippingId`, `title`, `WeightLimit`, `pricepkilo`, `shipperId`, `latitude`, `longitude`, `address`) VALUES
-(1, 'Fuso', 1500, 1000, 27, '', '', ''),
-(2, 'Benz', 200, 1000, 27, '', '', ''),
-(7, 'Fuso', 3000, 2000, 26, '', '', ''),
-(8, 'BMW', 2000, 10000, 27, '', '', ''),
-(9, 'Daihatsu', 5000, 10000, 23, '', '', '');
+INSERT INTO `shipper` (`shippingId`, `title`, `WeightLimit`, `pricepkilo`, `shipperId`) VALUES
+(1, 'Fuso', 2000, 10000, 1);
 
 -- --------------------------------------------------------
 
@@ -11142,14 +11092,6 @@ CREATE TABLE `shipping` (
   `village` varchar(20) NOT NULL,
   `createdDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `shipping`
---
-
-INSERT INTO `shipping` (`id`, `country`, `province`, `district`, `sector`, `cell`, `village`, `createdDate`) VALUES
-(1, '', '5000', '4000', '3000', '2000', '1000', '2017-05-14 21:08:05'),
-(2, '6000', '5000', '4000', '3000', '2000', '1000', '2017-05-14 21:09:16');
 
 -- --------------------------------------------------------
 
@@ -11197,13 +11139,6 @@ CREATE TABLE `transactions` (
   `doneBy` varchar(100) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `transactions`
---
-
-INSERT INTO `transactions` (`transactionID`, `companyId`, `trUnityPrice`, `qty`, `itemCode`, `operation`, `purchaseOrder`, `deliverlyNote`, `docRefNumber`, `customerName`, `customerRef`, `address`, `operationStatus`, `doneOn`, `doneBy`) VALUES
-(1, 1, '500.00000', '10.00000', '', 'In', '', '', '', '', '', '', 1, '2017-05-03 08:47:46', '5');
-
 -- --------------------------------------------------------
 
 --
@@ -11229,31 +11164,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `loginId`, `pwd`, `names`, `phone`, `email`, `account_type`, `createdDate`, `latitude`, `longitude`, `adress`) VALUES
-(1, 'admin', 'admin', 'Eric Mucyo', '0788880000', 'admin@trad.com', 'admin', '2017-05-03 10:01:35', '', '', ''),
-(5, 'cmuhirwa', 'clement123', 'Clement Muhirwa', '0784848236', 'muhirwaclement@gmail.com', 'user', '2018-02-06 19:32:42', '', '', ''),
-(6, 'nana', 'nana', 'nana', '0788551893', 'nana@gmail.com', 'saler', '2018-02-06 19:06:04', '', '', ''),
-(7, 'mlinda', 'linda123', 'MULINDA', '0788302539', 'TEST', 'user', '2017-05-03 10:01:35', '', '', ''),
-(65, 'skelly', 'skelly', 'Skelly', '0785478478', 'skellyallia@gmail.com', 'agent', '2018-02-09 17:50:21', '', '', ''),
-(9, 'cha', 'cha', 'Charles Kayonga', '0788880000', 'chacha@gmail.com', 'user', '2017-05-03 10:01:35', '', '', ''),
-(10, 'mu', 'mu', 'Muhire Jean', '07888800001', 'mu@gmail.com', 'user', '2017-05-03 10:01:35', '', '', ''),
-(11, 'muti', 'muti', 'briall mutijima', '0788884646', 'muti@gmail.com', 'user', '2017-05-03 10:01:35', '', '', ''),
-(17, 'alan', 'alan', 'alan', '0734555454', 'alan@email.com', 'saler', '2018-02-06 19:16:52', '', '', ''),
-(64, 'terry', 'terry', 'Terry', '0785421325', 'terry2020@gmail.com', 'agent', '2018-02-09 17:49:42', '', '', ''),
-(61, 'rickrick', 'rick123', 'rick', '0732659585', 'rick@gmail.com', 'agent', '2018-02-06 19:57:26', '', '', ''),
-(22, 'al', 'al', 'Alan', '29374987', 'al@gmail.com', 'user', '2017-05-18 18:24:53', '', '', ''),
-(23, 'Aizo', 'aizo', 'Akini', '0723964544', 'akini@sawasawa.com', 'shipper', '2018-02-09 17:48:21', '', '', ''),
-(24, 'cmuhirwas', 'clement123', 'Clement Shiper', '0784848236', 'cmuhirwa@gmail.com', 'shipper', '2018-02-06 19:46:11', '', '', ''),
-(63, 'nindian', 'NINDIAN', 'NIndian', '0782548454', 'nindian@gmail.com', 'user', '2018-02-07 10:27:21', '', '', ''),
-(27, 'Aizokini', 'aizokini', 'Aizo pro', '0723964544', 'aizokini@gmail.com', 'shipper', '2018-02-09 17:59:23', '', '', ''),
-(28, 'Isa', 'Isa', 'Isa', '0723964544', 'aizokini@gmail.com', 'saler', '2018-02-09 17:58:53', '', '', ''),
-(29, 'pro', 'pro', 'Iradukunda', '0722323324', 'pro@gmail.com', 'user', '2017-11-29 15:45:26', '', '', ''),
-(30, 'Khalifan', 'ivan', 'Eric Rick', '072396574', 'ericblessed@gmail.com', 'user', '2017-12-01 13:50:03', '', '', ''),
-(31, 'akini', 'akini', 'Aizo Kini', '0723964544', 'akini@gmail.com', 'user', '2018-02-02 13:07:20', '', '', ''),
-(32, 'muhirwa', 'muhi123', 'Muhirwa', '0784848236', 'muhirwa@gmail.com', 'user', '2018-02-06 19:32:11', '', '', ''),
-(33, 'eric1', 'eric1', 'Eric', '0788888888', 'eric@gmail.com', 'saler', '2018-02-06 17:47:31', '', '', ''),
-(41, 'eva', '122345', 'Sieva', '0729740040', 'sieva@gmail.com', 'saler', '2018-02-06 18:33:18', '', '', ''),
-(42, 'feira', '12345', 'Feira', '0728925054', 'feira@gmail.com', 'saler', '2018-02-06 18:36:04', '', '', ''),
-(66, 'tania', 'tania', 'Tania', '0723967567', 'tania8080@gmail.com', 'agent', '2018-02-09 17:50:51', '', '', '');
+(1, 'Feira', 'feira', 'Feira Honoline', '0723964544', 'hon.feira@gmail.com', 'shipper', '2018-02-18 14:10:38', '', '', 'kimihurura'),
+(2, 'Admin', 'admin', 'Alan', '0783964544', 'alan@pandagali.com', 'admin', '2018-02-14 02:09:08', '', '', 'Kimironko'),
+(3, 'sieva', 'sieva', 'Sieva Eva', '0723964544', 'sieva.eva@gmail.com', 'agent', '2018-02-18 13:54:29', '', '', 'Gisozi'),
+(4, 'aizo', 'aizo', 'Aizo kini pro', '0723964544', 'aizokini@gmail.com', 'saler', '2018-02-18 14:06:19', '', '', 'kagugu');
 
 --
 -- Indexes for dumped tables
@@ -11266,6 +11180,12 @@ ALTER TABLE `bids`
   ADD PRIMARY KEY (`transactionID`),
   ADD KEY `itemCode` (`itemCode`),
   ADD KEY `itemCode_2` (`itemCode`);
+
+--
+-- Indexes for table `charges`
+--
+ALTER TABLE `charges`
+  ADD PRIMARY KEY (`chargeId`);
 
 --
 -- Indexes for table `commentreplies`
@@ -11394,15 +11314,20 @@ ALTER TABLE `users`
 ALTER TABLE `bids`
   MODIFY `transactionID` bigint(20) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `charges`
+--
+ALTER TABLE `charges`
+  MODIFY `chargeId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `commentreplies`
 --
 ALTER TABLE `commentreplies`
-  MODIFY `replyID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `replyID` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `company1`
 --
 ALTER TABLE `company1`
-  MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `companyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `inclasse`
 --
@@ -11417,17 +11342,17 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items1`
 --
 ALTER TABLE `items1`
-  MODIFY `itemId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `itemId` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `levels`
 --
 ALTER TABLE `levels`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207070119;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207070117;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `orderId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `paysystems1`
 --
@@ -11442,7 +11367,7 @@ ALTER TABLE `posts`
 -- AUTO_INCREMENT for table `postscomments`
 --
 ALTER TABLE `postscomments`
-  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `commentId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `productcategory`
 --
@@ -11462,12 +11387,12 @@ ALTER TABLE `productsubcategory`
 -- AUTO_INCREMENT for table `shipper`
 --
 ALTER TABLE `shipper`
-  MODIFY `shippingId` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `shippingId` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `shipping`
 --
 ALTER TABLE `shipping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tags`
 --
@@ -11477,12 +11402,12 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transactionID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `transactionID` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
