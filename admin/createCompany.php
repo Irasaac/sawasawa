@@ -54,7 +54,7 @@ if(isset($_POST['companyName']))
 		$companyTin = $_POST['companyTin'];
 		include ("../db.php");
 		$sqlcpn = $db->query("INSERT INTO company1 (companyName, companyType, cumpanyUserCode, businessType, location, companyDescription, companyTin) 
-		VALUES ('$companyName', '$companyType', '$cumpanyUserCode', '$businessType', '$location', '$companyDescription', '$companyTin')")or die (mysqli_error());
+		VALUES ('$companyName', '$companyType', '$cumpanyUserCode', '$companyType', '$location', '$companyDescription', '$companyTin')")or die (mysqli_error());
 		$updateUser = $db ->query("UPDATE users SET account_type = '$businessType' WHERE id = '$cumpanyUserCode'");
 		$sql2 = $db->query("SELECT * FROM company1 ORDER BY companyId DESC limit 1");
 			while($row = mysqli_fetch_array($sql2)){
@@ -95,8 +95,8 @@ if(isset($_POST['companyName']))
 								<div class="md-input-wrapper">
 									<select name="companyType">
 										<option>-- Company Type --</option>
-										<option value="saler">Saler</option>
-										<option value="shipper">Shipper</option>
+										<option value="saler">saler</option>
+										<option value="shipper">shipper</option>
 									</select>
 								</div>
 								<label>Company Location:</label>
