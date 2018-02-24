@@ -30,21 +30,22 @@ if (isset($_POST['Signup']))
     require '../db.php';
     $sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`, `adress`) 
     VALUES ('$loginId', '$pwd', '$names', '$phone', '$email', '$location')");
-    $pid = mysqli_insert_id($sql); 
+    $selectInserted = $db->query("SELECT * FROM users ORDER BY id DESC limit 1");
+    $thisUser = mysqli_fetch_array($selectInserted);
+    $pid = $thisUser['id'];
+    $sessionloginId = $thisUser['loginId'];
+    $sessionpsw = $thisUser['pwd'];
     $_SESSION["id"] = $pid ;
-    $_SESSION["username"] = $loginId;
-    $_SESSION["password"] = $pwd;
+    $_SESSION["username"] = $sessionloginId;
+    $_SESSION["password"] = $sessionpsw;
     if ($_FILES['profile']['tmp_name'] != "") { 
-        $newname = ''.$userId.'.jpg';
+        $newname = ''.$pid.'.jpg';
         move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
     }
     header("location: ".$page."");
     exit();
 }
-if ($_FILES['profile']) { 
-    $newname = '1.jpg';
-    move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
-}
+
 if (isset($_POST['login'])){
 	
 	$username = $_POST['username'];
