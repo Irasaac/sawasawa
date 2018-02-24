@@ -38,7 +38,6 @@ if (isset($_POST['Signup']))
 	exit();	
 }
 if (isset($_POST['login'])){
-	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$page = $_POST['page'];
