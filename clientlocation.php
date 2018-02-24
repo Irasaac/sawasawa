@@ -123,7 +123,7 @@
         <script type="text/javascript" src="assets/js/theme-script.js"></script>
         <script type="text/javascript" src="assets/js/equalheight.js"></script>
         <script src="js/jquery.js"></script>    
-        <script src="http://maps.google.com/maps/api/js?key=AIzaSyAlKttaE2WuI1xKpvt-f7dBOzcBEHRaUBA&libraries=places"></script>
+        <script src="https://maps.google.com/maps/api/js?key=AIzaSyAlKttaE2WuI1xKpvt-f7dBOzcBEHRaUBA&libraries=places"></script>
 
         <script type="text/javascript">
             google.maps.event.addDomListener(window, 'load', initialize);
