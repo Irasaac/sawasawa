@@ -87,7 +87,7 @@
     	{
     		$companyName = $row['companyName'];
     		$companyDescription = $row['companyDescription'];
-            $location = $row['location'];
+            $location = $row['adress'];
             $companylocation = $row['location'];
             $companylatitude = $row['latitude'];
     		$companylongitude = $row['longitude'];
@@ -621,16 +621,16 @@
                                                     <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
                                                   </div>
                                                   <div class="modal-footer">
-                                                    <div class="col-md-5">
-                                                        <div style=" height: 200px;width: 200px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
+                                                    <div class="col-md-3">
+                                                        <div style=" height: 115px;width: 115px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
                                                     </div>
-                                                    <div class="col-md-7">
+                                                    <div class="col-md-9">
                                                         <p style="text-align:left;">
                                                             <b>Names: </b> <?php echo $shipperInfo['names'];?><br>
                                                             <b>Contact: </b><?php echo $shipperInfo['phone'];?><br>
                                                             <b>Limit: </b> <?php echo $shipper['WeightLimit'];?> Kg<br>
                                                             <b>Price Per Km: </b> <?php echo $shipper['pricepkilo'];?> frw<br>
-                                                             <b>Car Address: </b> <?php echo $shipper['address'];?><br>
+                                                             <b>Car Address: </b> <?php echo $shipper['address'];?><br><!-- 
                                                             <b>car lat: </b> <?php echo $shipper['latitude'];?><br>
                                                             <b>Car long: </b> <?php echo $shipper['longitude'];?><br>
                                                             <b>pro lat: </b> <?php echo $companylatitude;?><br>
@@ -639,7 +639,7 @@
                                                             <b>client long: </b> <?php echo $clientlongitude;?><br>
                                                             <b>Dist btn S and P: </b> <?php echo $distbtnshandpro;?> km<br>
                                                             <b>Dist btn P and C: </b> <?php echo $distbtnproandcli;?> km<br>
-                                                            <b>Total Distance: </b> <?php echo $totalDistance;?> km<br>
+                                                            <b>Total Distance: </b> <?php echo $totalDistance;?> km<br> -->
                                                             <b>Amount: </b> <?php echo number_format($totalDistance * $shipper['pricepkilo']) ;?> frw<br>
                                                         </p>
                                                     </div>
