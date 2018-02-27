@@ -23,7 +23,7 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
@@ -82,6 +82,7 @@ if(isset($_GET['subCatId']))
 if(isset($_GET['productId']))
 {
 	$productId = $_GET['productId'];
+	$comanyId = $_GET['itemCompanyCode'];
 	include ("../db.php");
 	$sql = $db->query("SELECT * FROM `levels` WHERE id = '$productId'");
 	$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
@@ -91,76 +92,78 @@ if(isset($_GET['productId']))
 	{
 		$productName = $row['name'];
 		$productId = $row['id'];
-		$sqlseller = $db->query("SELECT * FROM company1 WHERE cumpanyUserCode = '$thisid'");
-		while($row = mysqli_fetch_array($sqlseller)) 
-			{
-				$comanyId = $row['companyId'];
-				echo'
-				<form method="post" action="addItem.php" enctype="multipart/form-data">
-					
-					<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin="">
-                        <div class="uk-width-large-1-2 uk-row-first">
-                            <div class="uk-form-row">
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="itemName">Product Name</label>
-                                	<input required type="text" class="md-input" name="itemName">
-                                	<span class="md-input-bar"></span>
-                                </div>
-                            </div>
-                            <div class="uk-form-row">
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="unityPrice">Price</label>
-                                	<input required type="number" onkeyup="pricechange('.$percentage.')" class="md-input" name="unityPrice" id="unityPrice">
-                                	<span class="md-input-bar"></span>
-                                </div>
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="unityPrice">On web Price</label>
-                                	<input type="number" class="md-input" name="onwebunityPrice" id="onwebunityPrice" disabled>
-                                	<span class="md-input-bar"></span>
-                                </div>
-                            </div>
-                            <div class="uk-form-row">
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="quantity">Quantity</label>
-                                	<input required type="number" class="md-input" name="quantity" id="quantity">
-                                	<span class="md-input-bar"></span>
-                                </div>
-                            </div>
-                            <div class="uk-form-row">
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="endingdate">Ending Date</label>
-                                	<input type="date" class="md-input" name="endingdate" id="endingdate">
-                                	<span class="md-input-bar"></span>
-                                </div>
-                            </div>
-						</div>
-                        <div class="uk-width-large-1-2">
-                            <div class="uk-form-row">
-                                <label class="uk-form-label" for="fileField-selectized">Image</label>
-                                	<div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
-			                            Import image
-			                            <input required type="file" name="fileField" id="fileField"/> 
-                                	</div>
-                            </div>
-                            <div class="uk-form-row">
-                                <div class="md-input-wrapper md-input-filled">
-                                	<label for="description">Description</label>
-                                	<textarea required name="description" class="md-input" id="description" cols="30" rows="4"></textarea>
-                           		 </div>
-                            </div>
-                        </div>
-                    </div>
-						<input  type="text" name="productCode" value="'.$productId.'" hidden/>				
-						<input  type="text" name="itemCompanyCode" value="'.$comanyId.'" hidden/><br/>			
-						<input  type="text" name="username" value="'.$username.'" hidden/><br/>	
-						
-					
+		echo'
+			<form method="post" action="addItem.php" enctype="multipart/form-data">
+				
+				<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin="">
+	                <div class="uk-width-large-1-2 uk-row-first">
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="itemName">Product Name</label>
+	                        	<input required type="text" class="md-input" name="itemName">
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                    </div>
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="unityPrice">Price</label>
+	                        	<input required type="number" onkeyup="pricechange('.$percentage.')" class="md-input" name="unityPrice" id="unityPrice">
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="unityPrice">On web Price</label>
+	                        	<input type="number" class="md-input" name="onwebunityPrice" id="onwebunityPrice" disabled>
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                    </div>
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="quantity">Quantity</label>
+	                        	<input required type="number" class="md-input" name="quantity" id="quantity">
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                    </div>
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="quantity">Unit (Ex: KG,LT)</label>
+	                        	<input required type="text" class="md-input" name="unit" id="unit">
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                    </div>
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="endingdate">Ending Date</label>
+	                        	<input type="date" class="md-input" name="endingdate" id="endingdate">
+	                        	<span class="md-input-bar"></span>
+	                        </div>
+	                    </div>
+					</div>
+	                <div class="uk-width-large-1-2">
+	                    <div class="uk-form-row">
+	                        <label class="uk-form-label" for="fileField-selectized">Image</label>
+	                        	<div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
+		                            Import image
+		                            <input required type="file" name="fileField" id="fileField"/> 
+	                        	</div>
+	                    </div>
+	                    <div class="uk-form-row">
+	                        <div class="md-input-wrapper md-input-filled">
+	                        	<label for="description">Description</label>
+	                        	<textarea required name="description" class="md-input" id="description" cols="30" rows="4"></textarea>
+	                   		 </div>
+	                    </div>
+	                </div>
+	            </div>
+				<input  type="text" name="productCode" value="'.$productId.'" hidden/>				
+				<input  type="text" name="itemCompanyCode" value="'.$comanyId.'" hidden/><br/>			
+				<input  type="text" name="username" value="'.$username.'" hidden/><br/>	
 				<div class="md-fab-wrapper">
-        <button type="submit" class="md-fab md-fab-primary" id="product_edit_submit" name="addpst">
+	    		<button type="submit" class="md-fab md-fab-primary" id="product_edit_submit" name="addpst">
 				<i class="material-icons"></i></button>
-        
-    </div></form>';
-			}
+	    
+				</div>
+			</form>
+		';
 	}
 }
 // get the post title
@@ -297,5 +300,46 @@ if(isset($_GET['replyNotes']))
 	<br/>
 	<br/>
 	';
+}
+
+if (isset($_POST['industryId'])) {
+	$industryId = $_POST['industryId'];
+	$selectIt = $db ->query("SELECT * FROM industries WHERE industryId = '$industryId'");
+	$industry = mysqli_fetch_array($selectIt);
+	$industryName = $industry['industryName'];
+	$deleteIt = $db ->query("DELETE FROM industries WHERE industryId = '$industryId'");
+	$deleteCompany = $db ->query("DELETE FROM company1 WHERE businessType = '$industryName'");
+
+	$getIndustries = $db->query("SELECT * FROM Industries");
+	$countIndustries = mysqli_num_rows($getIndustries);
+	echo '
+		<table class="uk-table uk-table-striped" width="100%">
+			<thead >
+				<th>#</th>
+				<th>Industry Name</th>
+				<th>Actions</th>
+			</thead>
+			<tbody>
+	';
+	if($countIndustries > 0) {
+		$n = 0;
+		while ($industry = mysqli_fetch_array($getIndustries)) {
+			echo '
+				<tr>
+					<td>'.++$n.'</td>
+					<td>'.$industry['industryName'].'</td>
+					<td><a href="javascript:void()" onclick="removeindustry(industryId= '.$industry['industryId'].')">Remove</a></td>
+				</tr>
+			';
+		}
+	}
+	else {
+		echo '
+			<tr>
+				<td colspan="3">No Industry Found. Please Add</td>
+			</tr>
+		';
+	}
+	echo "</tbody></table>";
 }
 ?>

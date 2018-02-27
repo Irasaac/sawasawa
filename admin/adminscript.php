@@ -323,12 +323,14 @@ if(isset($_GET['salerUsername']))
 	$salerUsername = $_GET['salerUsername'];
 	$salerPassword = $_GET['salerPassword'];
 	$salerLocation = $_GET['salerLocation'];
-	$sql = $db->query("
-	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`, `adress`) 
-	VALUES ('$salerUsername', '$salerPassword', '$salerName', '$salerPhone', '$salerEmail', 'saler', '$salerLocation')
-	")or die (mysqli_error());
+	$sql = $db->query("INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `adress`, `Pic`) VALUES ('$salerUsername', '$salerPassword', '$salerName', '$salerPhone', '$salerEmail', '$salerLocation', 'dp.jpg')
+	");
+    $selectInserted = $db->query("SELECT * FROM users ORDER BY id DESC limit 1");
+    $thisUser = mysqli_fetch_array($selectInserted);
+    $pid = $thisUser['id'];
+    $giveType = $db ->query("INSERT INTO userAccounttype(accName, userId) VALUES('Saler', '$pid')");
 	// if($sql){echo "string";} else {echo "dfghj";}
-	if($sql){echo'<script>(function(){ bringTable("saler");})();	</script>';}
+	if($sql){echo'<script>(function(){ bringTable("Saler");})();	</script>';}
 }
 
 // 1 ADD NEW OTHER USER
@@ -341,10 +343,11 @@ if(isset($_GET['Username']))
 	$Username = $_GET['Username'];
 	$Password = $_GET['Password'];
 	$Location = $_GET['Location'];
-	$sql = $db->query("
-	INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `account_type`,adress) 
-	VALUES ('$Username', '$Password', '$Name', '$Phone', '$Email', '$account_type', '$Location')
-	")or die (mysqli_error());
+	$sql = $db->query("INSERT INTO `users`(`loginId`, `pwd`, `names`, `phone`, `email`, `adress`, `Pic`) VALUES ('$Username', '$Password', '$Name', '$Phone', '$Email', '$Location', 'dp.jpg')")or die (mysqli_error());
+    $selectInserted = $db->query("SELECT * FROM users ORDER BY id DESC limit 1");
+    $thisUser = mysqli_fetch_array($selectInserted);
+    $pid = $thisUser['id'];
+    $giveType = $db ->query("INSERT INTO userAccounttype(accName, userId) VALUES('$account_type', '$pid')");
 	// if($sql){echo "string";} else {echo "dfghj";}
 	if($sql){echo'<script>(function(){ bringTable("'.$account_type.'");})();	</script>';}
 }
@@ -353,7 +356,7 @@ if(isset($_GET['Username']))
 if(isset($_GET['editUser']))
 {
 	$id = $_GET['editUser'];
-	$sql1 = $db->query("SELECT * FROM `users` WHERE id='$id' LIMIT 1");
+	$sql1 = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND id='$id' limit 1");
 	while($row = mysqli_fetch_array($sql1))
 	{
 		echo'
@@ -373,7 +376,7 @@ if(isset($_GET['editUser']))
 				<label>Email</label>
 				<input type="text" class="md-input" name="EEmail" id="EEmail" value="'.$row['email'].'">
 				<span class="md-input-bar "></span>
-				<input type="hidden" class="md-input" name="Eaccount_type" id="Eaccount_type" value="'.$row['account_type'].'">
+				<input type="hidden" class="md-input" name="Eaccount_type" id="Eaccount_type" value="'.$row['accName'].'">
 			</div>
 			<div class="md-input-wrapper">
 				<label>Username</label>
@@ -406,7 +409,8 @@ if(isset($_GET['Eusername']))
 	$password = $_GET['Epassword'];
 	$Location = $_GET['ELocation'];
 	
-	$sql = $db->query("UPDATE users SET loginId= '$username', pwd= '$password', names= '$name', phone= '$Phone', email = '$Email', account_type= '$account_type', adress = '$Location' WHERE id='$id'")or die (mysqli_error());
+	$sql = $db->query("UPDATE users SET loginId= '$username', pwd= '$password', names= '$name', phone= '$Phone', email = '$Email', adress = '$Location' WHERE id='$id'")or die (mysqli_error());
+	$updateAccount = $db->query("UPDATE useraccounttype SET accName= '$account_type' WHERE userId='$id'")or die (mysqli_error());
 	
 	echo'<script>(function(){ bringTable("'.$account_type.'");})();	</script>';
 }
@@ -414,8 +418,21 @@ if(isset($_GET['Eusername']))
 if(isset($_GET['removeuserid']))
 {
 	$deleteId = $_GET['removeuserid'];
-	$sql = $db->query("DELETE FROM users WHERE id='$deleteId'")or die (mysqli_error());
-	
+	$accountType = $_GET['accountType'];
+	$selectHisAlltypes = $db ->query("SELECT * FROM useraccounttype WHERE userId='$deleteId'");
+	$countResult = mysqli_num_rows($selectHisAlltypes);
+	if ($countResult > 1) {
+		$sql = $db->query("DELETE FROM useraccounttype WHERE accName = '$accountType' AND userId='$deleteId'");
+	}
+	else{
+		$selectuserbefore = $db ->query("SELECT * FROM users WHERE id='$deleteId'");
+		$user = mysqli_fetch_array($selectuserbefore);
+		$userPic = $user['Pic'];
+		$sql = $db->query("DELETE FROM users WHERE id='$deleteId'");
+		if ($userPic != 'dp.jpg') {
+			unlink("../users/$userPic");
+		}
+	}
 	echo'Removed Successfuly';
 }
 // 4 BRING TABLE
@@ -433,7 +450,7 @@ if(isset($_GET['bringTable']))
 			<tbody>';
 			include ("../db.php");
 			$n=0;
-			$sql2 = $db->query("SELECT * FROM `users` WHERE account_type='$type' ORDER BY id DESC");
+			$sql2 = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND accName='$type'");
 			$count = mysqli_num_rows($sql2);
 			if($count > 0)
 			{

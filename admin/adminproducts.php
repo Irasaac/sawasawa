@@ -2,35 +2,40 @@
 session_start();
 	
 if (!isset($_SESSION["username"])) {
- header("location: login.php"); 
+ header("location: ../login.php"); 
     exit();
 }
 ?>
 
 <?php 
-	$session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everything but numbers and letters
-	$username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
-	$password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
-	include "../db.php"; 
-	$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
-	// ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
-	$existCount = mysqli_num_rows($sql); // count the row nums
-	if ($existCount > 0) { 
-		while($row = mysqli_fetch_array($sql)){ 
-			$thisid = $row["id"];
-			$names = $row["names"];
+$session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everything but numbers and letters
+$username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
+$password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
+include "../db.php"; 
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
+// ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
+$existCount = mysqli_num_rows($sql); // count the row nums
+if ($existCount > 0) { 
+	while($row = mysqli_fetch_array($sql)){ 
+		$thisid = $row["id"];
+		$names = $row["names"];
+        $userpic = $row["Pic"];
+		$account_type = $row["accName"];
+		if ($account_type != 'Admin') {
+			header("location: user.php");
 		}
-	} 
-	else{
-		echo "
-		
-		<br/><br/><br/><h3>Your account has been temporally deactivated</h3>
-		<p>Please contact: <br/><em>(+25) 078 484-8236</em><br/><b>muhirwaclement@gmail.com</b></p>		
-		Or<p><a href='../pages/logout.php'>Click Here to login again</a></p>
-		
-		";
-	    exit();
 	}
+} 
+else {
+	echo "
+	
+	<br/><br/><br/><h3>Your account has been temporally deactivated</h3>
+	<p>Please contact: <br/><em>(+25) 078 484-8236</em><br/><b>muhirwaclement@gmail.com</b></p>		
+	Or<p><a href='../pages/logout.php'>Click Here to login again</a></p>
+	
+	";
+    exit();
+}
 ?>
 <!doctype html>
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
@@ -139,7 +144,23 @@ if (!isset($_SESSION["username"])) {
     <!-- altair common functions/helpers -->
     <script src="assets/js/altair_admin_common.min.js"></script>
 
+    <!-- datatables -->
+    <script src="bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.print.js"></script>
+    
+      <!-- datatables custom integration -->
+    <script src="assets/js/custom/datatables/datatables.uikit.min.js"></script>
 
+    <!--  datatables functions -->
+    <script src="assets/js/pages/plugins_datatables.min.js"></script>
     <script>
         $(function() {
             if(isHighDensity()) {

@@ -23,19 +23,20 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
 	while($row = mysqli_fetch_array($sql)){ 
 			 $thisid = $row["id"];
 			 $names = $row["names"];
-			 $account_type = $row["account_type"];
+		$userpic = $row["Pic"];
+			 $account_type = $row["accName"];
 			 if($account_type =='admin')
-		{
-			header("location: admin.php");
-			exit();
-		}
+			{
+				header("location: admin.php");
+				exit();
+			}
 			}
 		} 
 		else{
@@ -109,6 +110,23 @@ if ($existCount > 0) {
 	
 ?>
 
+<?php
+
+	if (isset($_GET['companyid'])) {
+		$getcompanyId = $_GET['companyid'];
+		$selectThisCompany = $db ->query("SELECT * FROM company1 WHERE companyId = '$getcompanyId'");
+		while ($company = mysqli_fetch_array($selectThisCompany)) {
+			$getCompanyName = $company['companyName'];
+			$getCompanyType = $company['companyType'];
+		}
+	}
+	else {
+		header("location: user.php");
+	}
+
+?>
+
+
 <!doctype html>
 <!--[if lte IE 9]> <html class="lte-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en"> <!--<![endif]-->
@@ -120,7 +138,7 @@ if ($existCount > 0) {
 <div id="page_content">
 	<div id="page_content_inner">
 		<h4 class="heading_b uk-margin-bottom">
-            <a href="user.php"><i class="uk-icon-angle-double-left"></i> Back</a>&nbsp;&nbsp;&nbsp; Manage Items in <?php echo $companyName;?></h4>
+            <a href="user.php"><i class="uk-icon-angle-double-left"></i> Back</a>&nbsp;&nbsp;&nbsp; Manage Items in <?php echo $getCompanyName;?></h4>
 
 
 	
@@ -131,9 +149,9 @@ if ($existCount > 0) {
 
 					include ("../db.php");
 
-					if($companyType=="Shipper")
+					if($getCompanyType=="Shipper")
 					{
-						$sql2 = $db->query("SELECT * FROM shipper WHERE shipperId = '$thisid' ORDER BY shippingId DESC")or die (mysqli_error());
+						$sql2 = $db->query("SELECT * FROM shipper WHERE companyId = '$getcompanyId' ORDER BY shippingId DESC")or die (mysqli_error());
 						$countItems = mysqli_num_rows($sql2);
 						if($countItems > 0)
 						{
@@ -170,12 +188,12 @@ if ($existCount > 0) {
 							}
 						}
 					}
-					elseif($companyType=="Saler")
+					elseif($getCompanyType=="Saler")
 					{
 						$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
 						$rowpercentage = mysqli_fetch_array($selectPercentage);
 						$percentage = $rowpercentage['percentage'];
-						$sql2 = $db->query("SELECT * FROM `items1` WHERE postedBy = '$username' ORDER BY itemId DESC")or die (mysqli_error());
+						$sql2 = $db->query("SELECT * FROM `items1` WHERE itemCompanyCode = '$getcompanyId' ORDER BY itemId DESC")or die (mysqli_error());
 						$countItems = mysqli_num_rows($sql2);
 						if($countItems > 0)
 						{
@@ -235,7 +253,7 @@ if ($existCount > 0) {
            
 				 
 				<?php 
-				if($companyType =="Shipper"){echo '<a class="md-fab md-fab-success" href="javascript:void(0)" onclick="addcar()">
+				if($getCompanyType =="Shipper"){echo '<a class="md-fab md-fab-success" href="javascript:void(0)" onclick="addcar('.$getcompanyId.')">
 					<span style="
 		    position: absolute;
 		    background: #82b034;
@@ -250,7 +268,7 @@ if ($existCount > 0) {
 		    margin-left: 0px;
 		    color: #fff;
 			">&nbsp; Add car';}
-				else{echo '<a class="md-fab md-fab-success" href="javascript:void(0)" onclick="additem()">
+				else{echo '<a class="md-fab md-fab-success" href="javascript:void(0)" onclick="additem('.$getcompanyId.')">
 					<span style="
 		    position: absolute;
 		    background: #82b034;
@@ -299,6 +317,36 @@ if ($existCount > 0) {
     <script src="assets/js/altair_admin_common.min.js"></script>
 
     <script src="assets/js/pages/ecommerce_product_edit.min.js"></script>
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.print.js"></script>
+    
+      <!-- datatables custom integration -->
+    <script src="assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+    <!--  datatables functions -->
+    <script src="assets/js/pages/plugins_datatables.min.js"></script>
+    
+    <!-- d3 -->
+    <script src="bower_components/d3/d3.min.js"></script>
+    <!-- metrics graphics (charts) -->
+    <script src="bower_components/metrics-graphics/dist/metricsgraphics.min.js"></script>
+    <!-- c3.js (charts) -->
+    <script src="bower_components/c3js-chart/c3.min.js"></script>
+    <!-- chartist -->
+    <script src="bower_components/chartist/dist/chartist.min.js"></script>
+
+    <!--  charts functions -->
+    <script src="assets/js/pages/plugins_charts.min.js"></script>
 
     <script>
         $(function() {
@@ -368,31 +416,32 @@ function removeShipping(postid){
 		});
 		
     } else {
-        alert('Its fine man we wont delete it.');
+        alert('Its fine man we won\'t delete it.');
     }
 }
-function additem(){
+function additem(itemCompanyCode){
 	var itm = 'item';
-	//alert();
+	var itemCompanyCode = itemCompanyCode;
 	$.ajax({
-			type : "GET",
-			url : "addItem.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				itm : itm,
-			},
-			success : function(html, textStatus){
-				$("#new_prod").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
+		type : "GET",
+		url : "addItem.php",
+		dataType : "html",
+		cache : "false",
+		data : {
+			itm : itm,
+			itemCompanyCode : itemCompanyCode,
+		},
+		success : function(html, textStatus){
+			$("#new_prod").html(html);
+		},
+		error : function(xht, textStatus, errorThrown){
+			alert("Error : " + errorThrown);
+		}
 	});
 }
-function addcar(){
+function addcar(companyId){
 	var itm = 'car';
+	var companyId = companyId;
 	//alert();
 	$.ajax({
 			type : "GET",
@@ -402,6 +451,7 @@ function addcar(){
 			data : {
 				
 				itm : itm,
+				companyId : companyId,
 			},
 			success : function(html, textStatus){
 				$("#new_prod").html(html);
@@ -458,7 +508,8 @@ function get_prod(){
 }
 </script>
 <script> <!--3 start new post-->
-function changelocation() {
+function changelocation(itemCompanyCode) {
+	var itemCompanyCode = itemCompanyCode;
 	var locationId = document.getElementById('locationId').value;
 	//var locationId = document.getElementById('locationId').value;
     //document.getElementById("new_post_title").innerHTML ="POST in "+;
@@ -483,7 +534,6 @@ function changelocation() {
 		dataType : "html",
 		cache : "false",
 		data : {
-			
 			posttilte : locationId,
 		},
 		success : function(html, textStatus){
@@ -499,8 +549,8 @@ function changelocation() {
 		dataType : "html",
 		cache : "false",
 		data : {
-			
 			productId : locationId,
+			itemCompanyCode : itemCompanyCode,
 		},
 		success : function(html, textStatus){
 			$("#new_post_show").html(html);

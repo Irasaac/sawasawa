@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16">
     <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32">
 
-    <title>SAWASAWA</title>
+    <title>PANDAGALI</title>
 
 
     <!-- uikit -->
@@ -24,22 +24,25 @@
     <!-- themes -->
     <link rel="stylesheet" href="assets/css/themes/themes_combined.min.css" media="all">
 
-    <link rel="stylesheet" type="text/css" href="1122/_styles.css" media="screen">	
+    <link rel="stylesheet" type="text/css" href="1122/_styles.css" media="screen">  
 </head>
-<body class=" sidebar_main_open sidebar_main_swipe">
+<body class="sidebar_main_open sidebar_main_swipe">
     <!-- main header -->
     
 <header id="header_main">
         <div class="header_main_content">
-            <nav class="uk-navbar">
-               
-                    
-                <div class="uk-navbar-flip">
+            <nav class="uk-navbar">          
+                <!-- main sidebar switch -->
+                <a href="#" id="sidebar_main_toggle" class="sSwitch sSwitch_left">
+                    <span class="sSwitchIcon"></span>
+                </a>  
+                 <div class="uk-navbar-flip">
                     <ul class="uk-navbar-nav user_actions">
                         <li data-uk-dropdown="{mode:'click',pos:'bottom-right'}">
-                            <a href="#" class="user_action_image"><img class="md-user-image" src="assets/img/avatars/user.png" alt=""/></a>
+                            <a href="#" class="user_action_image"><img class="md-user-image" src="../users/<?php echo $userpic ?>" alt=""/></a>
                             <div class="uk-dropdown uk-dropdown-small">
                                 <ul class="uk-nav js-uk-prevent">
+                                    <li><a href="editprofile.php">Edit profile</a></li>
                                     <li><a href="../logout.php">Logout</a></li>
                                 </ul>
                             </div>
@@ -55,7 +58,7 @@
         <div class="sidebar_main_header">
             <div class="sidebar_logo">
                 <a href="admin.php" class="sSidebar_hide sidebar_logo_large">
-                    <img class="logo_regular" src="assets/img/logo_main.png" alt="" height="15" width="71"/>
+                    <img class="logo_regular" src="assets/img/logo_main.png" alt="" style="height: 60px" />
                     <img class="logo_light" src="assets/img/logo_main_white.png" alt="" height="15" width="71"/>
                 </a>
                 <a href="admin.php" class="sSidebar_show sidebar_logo_small">
@@ -75,9 +78,15 @@
                     
                 </li>
                 <li title="Dashboard">
-                    <a href="admin.php">
+                    <a href="category.php">
                         <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
                         <span class="menu_title">CATEGORIES</span>
+                    </a>
+                </li>
+                <li title="Dashboard">
+                    <a href="industries.php">
+                        <span class="menu_icon"><i class="material-icons">&#xE871;</i></span>
+                        <span class="menu_title">INDUSTRIES</span>
                     </a>
                 </li>
 				<li title="Dashboard">

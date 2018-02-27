@@ -23,31 +23,26 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
 	while($row = mysqli_fetch_array($sql)){ 
-			 $thisid = $row["id"];
-			 $names = $row["names"];
-			 $account_type = $row["account_type"];
-			 if($account_type =='admin')
-		{
-			header("location: admin.php");
-			exit();
-		}
-			}
-		} 
-		else{
-		echo "
-		
-		<br/><br/><br/><h3>Your account has been temporally deactivated</h3>
-		<p>Please contact: <br/><em>(+25) 0782010262</em><br/><b>uwamclemmy@gmail.com</b></p>		
-		Or<p><a href='../logout.php'>Click Here to login again</a></p>
-		
-		";
-	    exit();
+		$thisid = $row["id"];
+		$names = $row["names"];
+        $userpic = $row["Pic"];
 	}
+} 
+else{
+	echo "
+	
+	<br/><br/><br/><h3>Your account has been temporally deactivated</h3>
+	<p>Please contact: <br/><em>(+25) 0782010262</em><br/><b>uwamclemmy@gmail.com</b></p>		
+	Or<p><a href='../logout.php'>Click Here to login again</a></p>
+	
+	";
+    exit();
+}
 ?>
 
 <?php
@@ -55,6 +50,12 @@ if ($existCount > 0) {
 	if (isset($_POST['userId'])) {
 		$userId = $_POST['userId'];
 		if ($_FILES['profile']['tmp_name'] != "") {	
+            $selectuserbefore = $db ->query("SELECT * FROM users WHERE id='$userId'");
+            $user = mysqli_fetch_array($selectuserbefore);
+            $userPic = $user['Pic'];
+            if ($userPic != 'dp.jpg') {
+                unlink("../users/$userPic");
+            }
 			$newname = ''.$userId.'.jpg';
 			move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
 			header("location: user.php");
@@ -69,33 +70,35 @@ if ($existCount > 0) {
 <?php include'userheader.php' ;?>
 	<!-- main sidebar -->
 <div id="new_comp">
-<div id="page_content">
-        <div id="page_content_inner">
-			<h3 class="heading_b uk-margin-bottom">Edit Profile</h3>
-			<div class="uk-grid uk-grid-medium" data-uk-grid-margin="">
-                <div class="uk-width-xLarge-2-10 uk-width-large-3-10 uk-row-first" >
-
-					<form method="post" action="editprofile.php" enctype="multipart/form-data">
-						<div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin="">
-	                        <div class="uk-width-large-1-2 uk-row-first">
-	                            <div class="uk-form-row">
-	                                <label class="uk-form-label" for="carImage-selectized">Image</label>
-	                            	<div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
-			                            Import image
-			                            <input required type="hidden" name="userId" id="userId" value="<?php echo $thisid ?>" /> 
-			                            <input required type="file" name="profile" id="profile"/> 
-		                            </div>
-	                            </div>
-	                            <div class="uk-form-row">
-							        <input type="submit" value="Update" class="md-fab md-fab-primary" style="color: #fff; font-weight: bold;">
-	                            </div>
-							</div>
-	                        <div class="uk-width-large-1-2">
-	                        </div>
-	                    </div>	
-					</form>
-				</div>
-			</div>				 
+    <div id="page_content">
+        <h3 class="heading_b uk-margin-bottom">UPDATE PICTURE</h3>
+        <div class="md-card">
+            <div class="md-card-toolbar">
+                <h3 class="md-card-toolbar-heading-text" >
+                    ADD PICTURE
+                </h3>
+            </div>
+            <div class="md-card-content">
+                <form method="post" action="editprofile.php" enctype="multipart/form-data">
+                    <div class="uk-grid uk-grid-divider uk-grid-medium" data-uk-grid-margin="">
+                        <div class="uk-width-large-1-2 uk-row-first">
+                            <div class="uk-form-row">
+                                <label class="uk-form-label" for="carImage-selectized">Image</label>
+                                <div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
+                                    Import image
+                                    <input required type="hidden" name="userId" id="userId" value="<?php echo $thisid ?>" /> 
+                                    <input required type="file" name="profile" id="profile"/> 
+                                </div>
+                            </div>
+                            <div class="uk-form-row">
+                                <input type="submit" value="Update" class="md-fab md-fab-primary" style="color: #fff; font-weight: bold;">
+                            </div>
+                        </div>
+                        <div class="uk-width-large-1-2">
+                        </div>
+                    </div>  
+                </form>
+            </div>
         </div>
     </div>
 </div>

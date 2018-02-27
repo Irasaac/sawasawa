@@ -23,7 +23,7 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
@@ -53,16 +53,16 @@ if ($existCount > 0) {
 		$itemCompanyCode = $_POST['itemCompanyCode'];
 		$description = $_POST['description'];
 		$postDeadline = $_POST['endingdate'];
-		
+		$unit = $_POST['unit'];
 		include ("../db.php");
 		
 		$sql = $db->query("INSERT INTO items1 (
 		itemName, productCode, quantity, unityPrice, 
-		inDate, postedBy, itemCompanyCode, description, 
+		inDate, postedBy,unit, itemCompanyCode, description, 
 		postDeadline) 
 		VALUES (
 		'$itemName', '$productCode', '$quantity', '$unityPrice', 
-		now(), '$postedBy', '$itemCompanyCode', '$description', 
+		now(), '$postedBy', '$unit', '$itemCompanyCode', '$description', 
 		'$postDeadline')")or die (mysqli_error());
 		$sql9 = $db->query("SELECT * FROM items1 ORDER BY itemId DESC limit 1");
 		while($row = mysqli_fetch_array($sql9)){
@@ -71,7 +71,7 @@ if ($existCount > 0) {
 				$newname = ''.$Imagename.'.jpg';
 				move_uploaded_file( $_FILES['fileField']['tmp_name'], "../products/$newname");
 			}
-			header("location: items.php");
+			header("location: items.php?companyid=$itemCompanyCode");
 		}
 	}
 	elseif(isset($_POST['editpst']))
@@ -97,6 +97,7 @@ if ($existCount > 0) {
 <?php 
 if(isset($_GET['itm'])){
 if($_GET['itm']=="item"){
+	$getItemCompany = $_GET['itemCompanyCode'];
 ?>
 <div id="page_content">
 	<div id="page_content_inner">
@@ -117,7 +118,7 @@ if($_GET['itm']=="item"){
 									$sqllocation = $db->query("SELECT * FROM levels WHERE parentId = 0");
 									$countResults = mysqli_num_rows($sqllocation);
 									if($countResults > 0){
-									echo '<select name="locationId" id="locationId" onchange="changelocation()">';
+									echo '<select name="locationId" id="locationId" onchange="changelocation('.$getItemCompany.')">';
 										echo'<option >--Select SubCategory--</option>';
 										while($row = mysqli_fetch_array($sqllocation))
 											{ 
@@ -154,7 +155,9 @@ if($_GET['itm']=="item"){
     
 <?php 
 }
-elseif($_GET['itm']=="car"){?>
+elseif($_GET['itm']=="car"){
+	$companyshipperId = $_GET['companyId'];
+?>
 <div id="page_content">
 	<div id="page_content_inner">
 		<h3 class="heading_b uk-margin-bottom">NEW TRANSPORT</h3>
@@ -172,6 +175,7 @@ elseif($_GET['itm']=="car"){?>
                                 <div class="md-input-wrapper md-input-filled">
                                 	<label for="pricePK">Car Type</label>
                                 	<input required type="text" class="md-input" name="carType">
+                                	<input required type="hidden" value="<?php echo $companyshipperId;?>" name="companyId">
                                 	<span class="md-input-bar"></span>
                                 </div>
                             </div>
@@ -220,10 +224,10 @@ if(isset($_POST['carType'])){
 	$carType	= $_POST['carType'];
 	$maxWeight	= $_POST['maxWeight'];
 	$pricePK	= $_POST['pricePK'];
-
+	$companyId  = $_POST['companyId'];
 	include 'db.php';
 
-	$sql = $db->query("INSERT INTO shipper(title, WeightLimit, pricepkilo, shipperId) VALUES('$carType','$maxWeight','$pricePK','$thisid')") or die(mysql_error($db));
+	$sql = $db->query("INSERT INTO shipper(title, WeightLimit, pricepkilo, shipperId, companyId) VALUES('$carType','$maxWeight','$pricePK','$thisid', '$companyId')") or die(mysql_error($db));
 	$sql10 = $db->query("SELECT * FROM shipper ORDER BY shippingId DESC limit 1");
 	while($row = mysqli_fetch_array($sql10)){
 		$Imagename = $row['shippingId'];

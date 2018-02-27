@@ -23,14 +23,15 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
 	while($row = mysqli_fetch_array($sql)){ 
 			 $thisid = $row["id"];
 			 $names = $row["names"];
-			 $account_type = $row["account_type"];
+			$userpic = $row["Pic"];
+			 $account_type = $row["accName"];
 			 if($account_type =='admin')
 		{
 			header("location: admin.php");
@@ -115,38 +116,129 @@ VALUES  ('$unityPrice','$quantity','$Imagename','In','$itemCompanyCode','1','$th
 <?php include'userheader.php' ;?>
 	<!-- main sidebar -->
 <div id="new_comp">
-<div id="page_content">
+	<div id="page_content">
         <div id="page_content_inner">
-			<h3 class="heading_b uk-margin-bottom">MANAGE COMPANY</h3>
+			<h3 class="heading_b uk-margin-bottom">MANAGE COMPANIES</h3>
 			<div class="uk-grid uk-grid-medium" data-uk-grid-margin="">
-                <div class="uk-width-xLarge-2-10 uk-width-large-3-10 uk-row-first" >
-                    
-					<?php 
-									$sqlseller = $db->query("SELECT * FROM company1 WHERE cumpanyUserCode = '$thisid'");
-									$countComanies = mysqli_num_rows($sqlseller);
-									if($countComanies>0)
-										{
-											while($row = mysqli_fetch_array($sqlseller)) 
-												{
-													$comanyId = $row['companyId'];
+				<?php 
+					$sqlseller = $db->query("SELECT * FROM company1 WHERE cumpanyUserCode = '$thisid'");
+					$countComanies = mysqli_num_rows($sqlseller);
+					if($countComanies>0) {
+						while($row = mysqli_fetch_array($sqlseller)) {
+							$comanyId = $row['companyId'];
+							echo '
+        						<div class="uk-width-xLarge-2-10 uk-width-large-3-10 uk-row-first" >
+									<a href="items.php?companyid='.$comanyId.'">
+										<div class="md-card">
+				                            <img src="../company/'.$comanyId.'.jpg" alt="">
+				                            <div class="md-card-content">
+				                                <strong>'.$row['companyName'].'</strong><br>
+				                                <span class="uk-text-muted">'.$row['companyDescription'].'.</span>
+				                            </div>
+				                        </div>
+			                        </a>		
+								</div>
+		                    ';
+						}
+						echo '
+							<a href="javascript:void()" onclick="addcomp()">
+								<div class="md-card">
+		                            <div class="md-card-content">
+		                                <strong>ADD A COMPANY</strong>
+		                            </div>
+		                        </div>
+			                </a>
+			            ';
+					}
+					else {
+						echo'
+							<a href="javascript:void()" onclick="addcomp()">
+								<div class="md-card">
+		                            <div class="md-card-content">
+		                                <strong>ADD A COMPANY</strong>
+		                            </div>
+		                        </div>
+			                </a>
+			        	';
+					}
+				?>	
+			</div>	
+            <h4 class="heading_a uk-margin-bottom">Your Orders With Pandagali</h4>
+            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                <div class="uk-width-large-4-4">
+                    <div class="md-card">
+                        <div class="md-card-content">
+                            <div class="dt_colVis_buttons"></div>
+                            <table id="dt_tableExport" class="uk-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Unit Price</th>
+                                        <th>From</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+										<?php 
+											$sqlOrder = $db->query("SELECT * FROM orders WHERE customerCode = '$thisid'");
+											$count = mysqli_num_rows($sqlOrder);
+											if ($count > 0) {
+												$i = 0;
+												while($order = mysqli_fetch_array($sqlOrder)) {
+													$i++;
+													$orderId = $order['orderId'];
+													$itemId = $order['itemCode'];
+													$customerCode = $order['customerCode'];
+													$quantity = $order['quantity'];
+													$orderDate = $order['orderDate'];
+													$unityPrice = $order['unityPrice'];
+													$totalPrice = $order['TotalPrice'];
+													$Orderstatus = $order['orderStatus'];
+													$trackingCode = $order['trackingCode'];
+													$itemCompanyCode = $order['itemCompanyCode'];
+													$selectItem = $db ->query("SELECT * FROM items1 WHERE itemId = '$itemId'");
+													$item = mysqli_fetch_array($selectItem);
+													$itemName = $item['itemName'];
+													$itemUnit = $item['unit'];
+													$selectCustomer = $db ->query("SELECT * FROM users WHERE id = '$customerCode'");
+													$Customer = mysqli_fetch_array($selectCustomer);
+													$customerName = $Customer['names'];
+													$selectCompany = $db ->query("SELECT * FROM company1 WHERE companyId = '$itemCompanyCode'");
+													$Company = mysqli_fetch_array($selectCompany);
+													$CompanyName = $Company['companyName'];
 													echo '
-														<a href="items.php?compId='.$comanyId.'">
-														<div class="md-card">
-								                            <img src="../company/'.$comanyId.'.jpg" alt="">
-								                            <div class="md-card-content">
-								                                <strong>'.$row['companyName'].'</strong><br>
-								                                <span class="uk-text-muted">'.$row['companyDescription'].'.</span>
-								                            </div>
-								                        </div>
-								                        </a>';
+					                                    <tr>
+					                                        <td>'.$i.'</td>
+					                                        <td>'.$itemName.'</td>
+					                                        <td>'.$quantity.'</td>
+					                                        <td>'.$itemUnit.'</td>
+					                                        <td>'.$unityPrice.'</td>
+					                                        <td>'.$CompanyName.'</td>
+					                                        <td>'.$orderDate.'</td>
+					                                        <td>'.$Orderstatus.'</td>
+					                                    </tr>
+					                                ';
 												}
-										}
-									else
-										{
-											echo'<a href="javascript:void()" onclick="addcomp()">ADD A COMPANY</a>';
-										}
-									?>			
-				</div>
+											}
+											else {
+												echo '
+													<tr>
+														<td colspan="8">
+															<center><b>No Transaction yet</b></center>
+														</td>
+													</tr>
+												';
+											}
+										?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 			</div>				 
         </div>
     </div>
@@ -179,6 +271,37 @@ VALUES  ('$unityPrice','$quantity','$Imagename','In','$itemCompanyCode','1','$th
     <script src="assets/js/uikit_custom.min.js"></script>
     <!-- altair common functions/helpers -->
     <script src="assets/js/altair_admin_common.min.js"></script>
+    <!-- common functions -->
+    <!-- page specific plugins -->
+    <!-- datatables -->
+    <script src="bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <!-- datatables buttons-->
+    <script src="bower_components/datatables-buttons/js/dataTables.buttons.js"></script>
+    <script src="assets/js/custom/datatables/buttons.uikit.js"></script>
+    <script src="bower_components/jszip/dist/jszip.min.js"></script>
+    <script src="bower_components/pdfmake/build/pdfmake.min.js"></script>
+    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.colVis.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.html5.js"></script>
+    <script src="bower_components/datatables-buttons/js/buttons.print.js"></script>
+    
+      <!-- datatables custom integration -->
+    <script src="assets/js/custom/datatables/datatables.uikit.min.js"></script>
+
+    <!--  datatables functions -->
+    <script src="assets/js/pages/plugins_datatables.min.js"></script>
+    
+    <!-- d3 -->
+    <script src="bower_components/d3/d3.min.js"></script>
+    <!-- metrics graphics (charts) -->
+    <script src="bower_components/metrics-graphics/dist/metricsgraphics.min.js"></script>
+    <!-- c3.js (charts) -->
+    <script src="bower_components/c3js-chart/c3.min.js"></script>
+    <!-- chartist -->
+    <script src="bower_components/chartist/dist/chartist.min.js"></script>
+
+    <!--  charts functions -->
+    <script src="assets/js/pages/plugins_charts.min.js"></script>
 
 
     <script>
@@ -228,20 +351,19 @@ function get_sub(){
 	var catId =$("#catId").val();
 	//alert(catId);
 	$.ajax({
-			type : "GET",
-			url : "userscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				catId : catId,
-			},
-			success : function(html, textStatus){
-				$("#suboption").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
+		type : "GET",
+		url : "userscript.php",
+		dataType : "html",
+		cache : "false",
+		data : {
+			catId : catId,
+		},
+		success : function(html, textStatus){
+			$("#suboption").html(html);
+		},
+		error : function(xht, textStatus, errorThrown){
+			alert("Error : " + errorThrown);
+		}
 	});
 }
 </script>

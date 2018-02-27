@@ -12,16 +12,21 @@ $session_id = preg_replace('#[^0-9]#i', '', $_SESSION["id"]); // filter everythi
 $username = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["username"]); // filter everything but numbers and letters
 $password = preg_replace('#[^A-Za-z0-9]#i', '', $_SESSION["password"]); // filter everything but numbers and letters
 include "../db.php"; 
-$sql = $db->query("SELECT * FROM users WHERE loginId='$username' AND pwd='$password' LIMIT 1"); // query the person
+$sql = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1"); // query the person
 // ------- MAKE SURE PERSON EXISTS IN DATABASE ---------
 $existCount = mysqli_num_rows($sql); // count the row nums
 if ($existCount > 0) { 
 	while($row = mysqli_fetch_array($sql)){ 
-	 $thisid = $row["id"];
-	 $names = $row["names"];
+		$thisid = $row["id"];
+		$names = $row["names"];
+		$userpic = $row["Pic"];
+		$account_type = $row["accName"];
+		if ($account_type != 'admin') {
+			header("location: user.php");
+		}
 	}
 } 
-else{
+else {
 	echo "
 	
 	<br/><br/><br/><h3>Your account has been temporally deactivated</h3>
@@ -134,107 +139,116 @@ if(isset($_POST['addp']))
 	<!-- main sidebar -->
    
     <div id="page_content">
-        <div id="page_content_inner">
-
-            <h3 class="heading_b uk-margin-bottom">MANAGE CATEGORIES</h3>
-			<div class="uk-grid uk-grid-width-medium-1-2" data-uk-grid="{gutter:24}">
-                <div>
-                    <div class="md-card">
-                        <div class="md-card-toolbar">
-                            <h3 class="md-card-toolbar-heading-text" >
-                                Add Categories
-                            </h3>
-                        </div>
-                        <div class="md-card-content">
-							<form method="post" action="admin.php" enctype="multipart/form-data" class="form-group">
-								<input type="text" name="cumpanyUserCode" value="<?php echo $thisid;?>" hidden/>
-								<div id="locations">
-									New Category:<br/>
-									<input type="text" name="levelname"/>
-									<button type="submit" name="addcat" class="md-btn md-btn-success md-btn-wave-light waves-effect waves-button waves-light">Add</button>
-									<br/><?php 
-											$sqllocation = $db->query("SELECT * FROM levels WHERE parentId = 0");
-											$countResults = mysqli_num_rows($sqllocation);
-											if($countResults > 0){
-											echo '<select name="locationId" id="locationId" onchange="changelocation()">';
-												echo'<option >--Select a Category--</option>';
-												while($row = mysqli_fetch_array($sqllocation))
-													{ 
-														echo'<option value="'.$row['id'].'">'.$row['name'].'</option>';
-													}
-											echo'</select></br>';
-											}
-												echo'<input type="text" name="SavelocationId" hidden value="0"/>';
-											
-										?>
-									</br>
-									<!--
-									New Tag:<br/>
-									<input type="text" name="tagname"/>
-									<button type="submit" name="addtag" class="md-btn md-btn-success md-btn-wave-light waves-effect waves-button waves-light">Add</button>
-									<br/><?php 
-											$sqltags = $db->query("SELECT * FROM tags WHERE levelId = 0");
-											$countTags = mysqli_num_rows($sqltags);
-											if($countTags > 0){
-											echo '<select name="tagId" id="tagId" onchange="changeTags()">';
-												echo'<option >--Select a Tag--</option>';
-												while($row = mysqli_fetch_array($sqltags))
-													{ 
-														echo'<option value="'.$row['id'].'">'.$row['name'].'</option>';
-													}
-											echo'</select></br>';
-											}else{
-												echo'<input type="text" name="SaveTagParentId" hidden value="0"/>';
-											}
-										?>
-									</br>-->
-								</div>
-								
-							</form>	
-						</div>
+        <div id="page_content_inner">	
+            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                <div class="uk-width-large-4-4">
+					<div class="md-card">
+	                    <div class="md-card-content">
+	                        <h4 class="heading_c uk-margin-bottom">Orders</h4>
+	                        <div id="chartist_line_area" class="chartist"></div>
+	                    </div>
                     </div>
-				</div>
-			    <div>
+                </div>
+			</div>	
+			<?php
+				$output = '';
+				$sqlOrder = $db->query("SELECT * FROM orders");
+				$count = mysqli_num_rows($sqlOrder);
+				if ($count > 0) {
+					$i = 0;
+					$s = 0;
+					while($order = mysqli_fetch_array($sqlOrder)) {
+						$Orderstatus = $order['orderStatus'];
+						if($Orderstatus == 'Shipped') {
+							$s++;
+							$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+				            $rowpercentage = mysqli_fetch_array($selectPercentage);
+				            $percentage = $rowpercentage['percentage'];
+							$profit = (($percentage/100)*$order['unityPrice']);
+							$totalprofit = $profit*$order['quantity'];
+							$fullprofit = $fullprofit + $totalprofit;
+						}
+						$i++;
+						$orderId = $order['orderId'];
+						$itemId = $order['itemCode'];
+						$customerCode = $order['customerCode'];
+						$quantity = $order['quantity'];
+						$orderDate = $order['orderDate'];
+						$unityPrice = $order['unityPrice'];
+						$totalPrice = $order['TotalPrice'];
+						$trackingCode = $order['trackingCode'];
+						$itemCompanyCode = $order['itemCompanyCode'];
+						$selectItem = $db ->query("SELECT * FROM items1 WHERE itemId = '$itemId'");
+						$item = mysqli_fetch_array($selectItem);
+						$itemName = $item['itemName'];
+						$itemUnit = $item['unit'];
+						$selectCustomer = $db ->query("SELECT * FROM users WHERE id = '$customerCode'");
+						$Customer = mysqli_fetch_array($selectCustomer);
+						$customerName = $Customer['names'];
+						$selectCompany = $db ->query("SELECT * FROM company1 WHERE companyId = '$itemCompanyCode'");
+						$Company = mysqli_fetch_array($selectCompany);
+						$CompanyName = $Company['companyName'];
+						$selectPercentage = $db->query("SELECT * FROM `charges` WHERE chargedFrom = 'saler'");
+			            $rowpercentage = mysqli_fetch_array($selectPercentage);
+			            $percentage = $rowpercentage['percentage'];
+						$waitedprofit = (($percentage/100)*$order['unityPrice']);
+						$waitedtotalprofit = $waitedprofit*$quantity;
+						$waitedfullprofit = $waitedfullprofit + $waitedtotalprofit;
+						$output .= '
+	                        <tr>
+	                            <td>'.$i.'</td>
+	                            <td>'.$itemName.'</td>
+	                            <td>'.$quantity.'</td>
+	                            <td>'.$itemUnit.'</td>
+	                            <td>'.$unityPrice.'</td>
+	                            <td>'.$CompanyName.'</td>
+	                            <td>'.$waitedtotalprofit.'</td>
+	                            <td>'.$orderDate.'</td>
+	                            <td>'.$Orderstatus.'</td>
+	                        </tr>
+	                    ';
+					}
+				}
+				else {
+					$output .= '
+						<tr>
+							<td colspan="8">
+								<center><b>No Transaction yet</b></center>
+							</td>
+						</tr>
+					';
+				}
+			?>
+            <h4 class="heading_a uk-margin-bottom">Total Orders: <?php echo number_format($i); ?>, Complete are: <?php echo number_format($s); ?> which makes profit of <?php echo number_format($fullprofit); ?></h4>
+            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                <div class="uk-width-large-4-4">
                     <div class="md-card">
-                        <div class="md-card-toolbar">
-                            <h3 class="md-card-toolbar-heading-text" >
-                                Categories
-                            </h3>
-                        </div>
                         <div class="md-card-content">
-						<?php
-							
-							function getlocations($parentIds)
-							{
-								include("db.php");
-								$getlocations = $db->query("SELECT * FROM levels WHERE parentId = '$parentIds'");
-								$countLocations = mysqli_num_rows($getlocations);
-								if($countLocations > 0)
-								{
-									echo '
-									<ol class="tree">';
-									while($rowLoc = mysqli_fetch_array($getlocations))
-									{
-										$parentIds = $checkId= $rowLoc['id'];
-										echo '
-										<li>
-											<label for="folder'.$checkId.'"> '.$rowLoc['name'].' </label> 
-											<input type="checkbox" id="folder'.$checkId.'"/>';
-											getlocations($parentIds = $checkId);
-												
-										echo'
-										</li>';
-									}
-									echo '
-									</ol>';
-								}
-							}
-							getlocations($parentIds = 0);
-						?>
-						</div>
+                            <div class="dt_colVis_buttons"></div>
+                            <table id="dt_tableExport" class="uk-table" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Unit Price</th>
+                                        <th>From</th>
+                                        <th>Profit</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+										<?php 
+											echo $output;
+										?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-				</div>
-				
+                </div>
+			</div>		
         </div>
     </div>
 
@@ -266,7 +280,16 @@ if(isset($_POST['addp']))
     <!-- altair common functions/helpers -->
     <script src="assets/js/altair_admin_common.min.js"></script>
 
-
+    <!-- d3 -->
+    <script src="bower_components/d3/d3.min.js"></script>
+    <!-- metrics graphics (charts) -->
+    <script src="bower_components/metrics-graphics/dist/metricsgraphics.min.js"></script>
+    <!-- c3.js (charts) -->
+    <script src="bower_components/c3js-chart/c3.min.js"></script>
+    <!-- chartist -->
+    <script src="bower_components/chartist/dist/chartist.min.js"></script>
+    <!--  charts functions -->
+    <script src="assets/js/pages/plugins_charts.min.js"></script>
     <script>
         $(function() {
             if(isHighDensity()) {
@@ -285,375 +308,5 @@ if(isset($_POST['addp']))
             altair_helpers.ie_fix();
         });
     </script>
-<script> <!--1 Load cat in the cat to edit-->
-function cat(catID){
-	$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				catID : catID,
-			},
-			success : function(html, textStatus){
-				$("#cat").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-<!--Remove category-->
-function removeCat(catID){
-	var r = confirm("Are you sure you want to remove this category from the list");
-    if (r == true)
-		{
-   			removeCatId=catID;
-			$.ajax({
-					type : "GET",
-					url : "adminscript.php",
-					dataType : "html",
-					cache : "false",
-					data : {
-						
-						removeCatId : removeCatId,
-						checkRemoveCatId : removeCatId,
-					},
-					success : function(html, textStatus){
-						$("#catTable").html(html);
-					},
-					error : function(xht, textStatus, errorThrown){
-						alert("Error : " + errorThrown);
-					}
-			});
-		}
-}
-<!--Remove category-->
-function removeSubCat(subCatId){
-	var r = confirm("Are you sure you want to remove this category from the list");
-    if (r == true)
-		{
-   			removeSubCatId=subCatId;
-			$.ajax({
-					type : "GET",
-					url : "adminscript.php",
-					dataType : "html",
-					cache : "false",
-					data : {
-						
-						removeSubCatId : removeSubCatId,
-					},
-					success : function(html, textStatus){
-						$("#SucatTable").html(html);
-					},
-					error : function(xht, textStatus, errorThrown){
-						alert("Error : " + errorThrown);
-					}
-			});
-		}
-}<!--Remove Product-->
-function removeProduct(productId){
-	var r = confirm("Are you sure you want to remove this category from the list");
-    if (r == true)
-		{
-   			removeProductId=productId;
-			$.ajax({
-				type : "GET",
-				url : "adminscript.php",
-				dataType : "html",
-				cache : "false",
-				data : {
-					
-					removeProductId : removeProductId,
-				},
-				success : function(html, textStatus){
-					$("#productTable").html(html);
-				},
-				error : function(xht, textStatus, errorThrown){
-					alert("Error : " + errorThrown);
-				}
-			});
-		}
-}
-</script>
-<script> <!--2 Show subcat-->
-function showsub(showCatId){
-	$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				showCatId : showCatId,
-			},
-			success : function(html, textStatus){
-				$("#sub").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-</script>
-<script> <!--3 Load subcat in the subcat to edit-->
-function subcatfill(subcatfillID){
-	$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				subcatfillID : subcatfillID,
-			},
-			success : function(html, textStatus){
-				$("#subcat").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-</script>
-<script> <!--4 Show product-->
-function product(subCatId){
-//	alert(subCatCode);
-	$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				subCatId : subCatId,
-			},
-			success : function(html, textStatus){
-				$("#product").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-</script>
-<script> <!--5 Load product to Edit-->
-function productEdit(productEditID){
-//	alert(subCatCode);
-	$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				productEditID : productEditID,
-			},
-			success : function(html, textStatus){
-				$("#productEdit").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-
-<!--5 Add a user-->
-function insertUser()
-{
-	
-	var name = document.getElementById('name').value;
-	//alert(purchaseOrder);
-	if (name == null || name == "") {
-        alert("name must be filled out");
-        return false;
-    }
-	var Phone = document.getElementById('Phone').value;
-	if (Phone == null || Phone == "") {
-        alert("Phone must be filled out");
-        return false;
-    }
-	var Email = document.getElementById('Email').value;
-	if (Email == null || Email == "") {
-        alert("Email must be filled out");
-        return false;
-    }
-	var account_type = document.getElementById('account_type').value;
-	if (account_type == null || account_type == "") {
-        alert("account_type must be filled out");
-        return false;
-    }
-	var username = document.getElementById('username').value;
-	if (username == null || username == "") {
-        alert("username must be filled out");
-        return false;
-    }
-	var password = document.getElementById('password').value;
-	if (password == null || password == "") {
-        alert("password must be filled out");
-        return false;
-    }
-	
-	//document.getElementById('tempTable').innerHTML = '';
-		$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				name : name,
-				Phone : Phone,
-				Email : Email,
-				account_type : account_type,
-				username : username,
-				password : password,
-				
-				
-			},
-			success : function(html, textStatus){
-				$("#listTable").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-<!--5 load user to Edit-->
-function editUser(userId)
-{
-	var editUser = userId;
-		$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				editUser : editUser,
-				
-				
-			},
-			success : function(html, textStatus){
-				$("#userdiv").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-<!--5 Edit user-->
-function updateUser()
-{
-	
-	var Ename = document.getElementById('Ename').value;
-	//alert(purchaseOrder);
-	if (Ename == null || Ename == "") {
-        alert("name must be filled out");
-        return false;
-    }
-	var EPhone = document.getElementById('EPhone').value;
-	if (EPhone == null || EPhone == "") {
-        alert("EPhone must be filled out");
-        return false;
-    }
-	var EEmail = document.getElementById('EEmail').value;
-	if (EEmail == null || EEmail == "") {
-        alert("EEmail must be filled out");
-        return false;
-    }
-	var Eaccount_type = document.getElementById('Eaccount_type').value;
-	if (Eaccount_type == null || Eaccount_type == "") {
-        alert("Eaccount_type must be filled out");
-        return false;
-    }
-	var Eusername = document.getElementById('Eusername').value;
-	if (Eusername == null || Eusername == "") {
-        alert("Eusername must be filled out");
-        return false;
-    }
-	var Epassword = document.getElementById('Epassword').value;
-	if (Epassword == null || Epassword == "") {
-        alert("Epassword must be filled out");
-        return false;
-    }
-	var Eid = document.getElementById('Eid').value;
-	if (Eid == null || Eid == "") {
-        alert("Eid must be filled out");
-        return false;
-    }
-	
-	//document.getElementById('tempTable').innerHTML = '';
-		$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				Ename : Ename,
-				Eid : Eid,
-				EPhone : EPhone,
-				EEmail : EEmail,
-				Eaccount_type : Eaccount_type,
-				Eusername : Eusername,
-				Epassword : Epassword,
-				
-				
-			},
-			success : function(html, textStatus){
-				$("#listTable").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-// BRING TABLE
-function bringTable()
-{
-	var bringTable = '1';
-		$.ajax({
-			type : "GET",
-			url : "adminscript.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				
-				bringTable : bringTable,
-				
-				
-			},
-			success : function(html, textStatus){
-				$("#listTable").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-	});
-}
-</script>
-<script type="text/javascript">
-	function changelocation(){
-		var locationId = document.getElementById('locationId').value;
-		//alert(locationId);
-		$.ajax({
-			type : "GET",
-			url : "selectLocationadmin.php",
-			dataType : "html",
-			cache : "false",
-			data : {
-				locationId : locationId,
-			},
-			success : function(html, textStatus){
-				$("#locations").html(html);
-			},
-			error : function(xht, textStatus, errorThrown){
-				alert("Error : " + errorThrown);
-			}
-		});
-	}
-</script>
 </body>
 </html>

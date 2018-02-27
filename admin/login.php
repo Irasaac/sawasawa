@@ -1,107 +1,88 @@
 <?php 
-session_start();
-// if (isset($_SESSION["username"])) {
-//     header("location: user.php"); 
-//     exit();
-// }
-error_reporting(0);
+    session_start();
+    unset($_SESSION["id"]);
+    unset($_SESSION["username"]);
+    unset($_SESSION["password"]);
+    error_reporting(0);
 ?>
 <?php
-if(isset($_GET['page']))
-{
-	$page= $_GET['page'];
-}
-elseif(!isset($_GET['page']))
-{
-	$page= 'user.php';
-}
-
-?>
-<?php
-if (isset($_POST['Signup']))
-{
-    $page = $_POST['page'];
-    $loginId = $_POST['loginId'];
-    $pwd = $_POST['pwd'];
-    $names = $_POST['names'];
-    $phone = $_POST['phone'];
-    $email = $_POST['email'];
-    $location = $_POST['location'];
-    require '../db.php';
-    $sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`, `adress`) 
-    VALUES ('$loginId', '$pwd', '$names', '$phone', '$email', '$location')");
-    $selectInserted = $db->query("SELECT * FROM users ORDER BY id DESC limit 1");
-    $thisUser = mysqli_fetch_array($selectInserted);
-    $pid = $thisUser['id'];
-    $sessionloginId = $thisUser['loginId'];
-    $sessionpsw = $thisUser['pwd'];
-    $_SESSION["id"] = $pid ;
-    $_SESSION["username"] = $sessionloginId;
-    $_SESSION["password"] = $sessionpsw;
-    if ($_FILES['profile']['tmp_name'] != "") { 
-        $newname = ''.$pid.'.jpg';
-        move_uploaded_file( $_FILES['profile']['tmp_name'], "../users/$newname");
+    if(isset($_GET['page']))
+    {
+    	$page= $_GET['page'];
     }
-    header("location: ".$page."");
-    exit();
-}
+    elseif(!isset($_GET['page']))
+    {
+    	$page= 'user.php';
+    }
 
-if (isset($_POST['login'])){
-	
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	$page = $_POST['page'];
-	require '../db.php';
-	$help ="";
-	$sql_check_user = $db->query("SELECT * FROM users WHERE loginId = '$username' AND pwd = '$password' limit 1")or die ($db->error);
-	$existCount= mysqli_num_rows($sql_check_user);
-	if ($existCount == 1) { // evaluate the count
-	     while($row = mysqli_fetch_array($sql_check_user)){ 
-             $id = $row["id"];
-             $account_type = $row["account_type"];
-		 }
-		
-		 $_SESSION["id"] = $id;
-		// echo $phone;
-		$_SESSION["username"] = $username;
-		$_SESSION["password"] = $password;
-		if($account_type =='admin')
-		{
-			header("location: admin.php");
-			exit();
-		}
-        elseif ($account_type =='user')
-        {
-            header("location: ".$page."");
-            exit();
-        }
-        elseif ($account_type =='shipper')
-        {
-            header("location: ".$page."");
-            exit();
-        }
-        elseif ($account_type =='saler')
-        {
-            header("location: ".$page."");
-            exit();
-        }
-		elseif ($account_type =='agent')
-		{
-			header("location: ".$page."");
-            exit();
-		}
-        else {
-            ?>
-            <script type="text/javascript">
-            alert("You are not supposed to login here");
-            </script>
-            <?php
-        }
-    }else {$help.="try!";}
-}
-else{
-	 $help="";
-}
+?>
+<?php
+    if (isset($_POST['Signup']))
+    {
+        $page = $_POST['page'];
+        $loginId = $_POST['loginId'];
+        $pwd = $_POST['pwd'];
+        $names = $_POST['names'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+        $location = $_POST['location'];
+        require '../db.php';
+        $sql = $db->query("INSERT INTO users (`loginId`, `pwd`, `names`, `phone`, `email`, `adress`, `Pic`) 
+        VALUES ('$loginId', '$pwd', '$names', '$phone', '$email', '$location', 'dp.jpg')");
+        $selectInserted = $db->query("SELECT * FROM users ORDER BY id DESC limit 1");
+        $thisUser = mysqli_fetch_array($selectInserted);
+        $pid = $thisUser['id'];
+        $giveType = $db ->query("INSERT INTO userAccounttype(accName, userId) VALUES('user', '$pid')");
+        $sessionloginId = $thisUser['loginId'];
+        $sessionpsw = $thisUser['pwd'];
+        $_SESSION["id"] = $pid ;
+        $_SESSION["username"] = $sessionloginId;
+        $_SESSION["password"] = $sessionpsw;
+        header("location: ".$page."");
+        exit();
+    }
+
+    if (isset($_POST['login'])){
+    	
+    	$username = $_POST['username'];
+    	$password = $_POST['password'];
+    	$page = $_POST['page'];
+    	require '../db.php';
+    	$help ="";
+    	$sql_check_user = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND loginId = '$username' AND pwd = '$password' limit 1");
+    	$existCount= mysqli_num_rows($sql_check_user);
+    	if ($existCount == 1) { // evaluate the count
+    	     while($row = mysqli_fetch_array($sql_check_user)){ 
+                 $id = $row["id"];
+                 $account_type = $row["accName"];
+    		 }
+    		
+    		 $_SESSION["id"] = $id;
+    		// echo $phone;
+    		$_SESSION["username"] = $username;
+    		$_SESSION["password"] = $password;
+    		if($account_type =='admin')
+    		{
+                header("location: admin.php");
+                exit();
+    		}
+            elseif ($account_type !='admin')
+            {
+                header("location: ".$page."");
+                exit();
+            }
+            else {
+                ?>
+                <script type="text/javascript">
+                alert("You are not supposed to login here");
+                </script>
+                <?php
+            }
+        }else {$help.="try!";}
+    }
+    else{
+    	 $help="";
+    }
 
 ?>
 
@@ -212,13 +193,6 @@ else{
                     <div class="uk-form-row">
                         <label for="location">Location</label>
                         <input class="md-input" type="text" id="location" name="location" />
-                    </div>
-                    <div class="uk-form-row">
-                        <label for="profile">Image</label>
-                        <div class="uk-form-file md-btn md-btn-primary" data-uk-tooltip="">
-                            Import image 
-                            <input required type="file" name="profile" id="profile"/> 
-                        </div>
                     </div>
                     <input type="hidden" name="page" value="<?php echo $page;?>"/>
                     <div class="uk-margin-medium-top">
