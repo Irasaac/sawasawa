@@ -86,6 +86,7 @@
 	//       Section 5  (render the cart for the user to view on the page)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$cartOutput = "";
+	$cartSummary = "";
 	$cartTotal = "";
 	$i = 0;
 	$pp_checkout_btn = '';
@@ -170,6 +171,17 @@
 								</form>
 							</td>';
 			$cartOutput .= '</tr>';
+
+
+			$cartSummary .= "<tr>";
+			$cartSummary .= '
+			<td class="cart_product">
+			<a href="cart.php?postId='.$item_id.'"><img src="products/'.$item_id.'.jpg" alt="'.$product_name.'" title="'.$product_name.'"></a>
+			</td>';
+			$cartSummary .= '<td>' . number_format($onWebprice) . ' Rwf</td>';
+			$cartSummary .= '<td class="qty">' . $each_item['quantity'] . '</td>';
+			$cartSummary .= '<td class="price"><span>' . number_format($pricetotal) . ' Rwf</span></td>';
+			$cartSummary .= '</tr>';
 			$i++; 
 	    } 
 		//setlocale(LC_MONETARY, "en_US");

@@ -14,12 +14,9 @@
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/index9.css" />
     <link rel="stylesheet" type="text/css" href="css/stepwizard.css" />
-    <!--[if IE]>
-    <style>.form-category .icon {display: none;}</style>
-    <![endif]--> 
     <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/responsive9.css" />
-    <title>SAWASAWA</title>
+    <title>PANDAGALI</title>
     <style type="text/css">
         .itemheight {
             max-height:370px;
@@ -152,27 +149,26 @@
                 </div>
             </div>
         </div>
-        <div class="footer">
-            <div class="row">
-                <!-- Column left -->
-                <div class="stepwizardfooter">
-                    <div class="row setup-content" id="step-2">
-                        <div class="col-md-3"></div>
-                        <div class="col-xs-6">
-                            <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
-                                <div class="input-search">
-                                    <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Enter tracking code to see your order" class="form-control">
-                                    <div class="trackingCode" id="trackingCodeSpace"></div>
-                                </div>
-                            </form>
-                        </div>
+    </div>
+    <div class="footer">
+        <div class="row">
+            <!-- Column left -->
+            <div class="stepwizardfooter" style="background-color: #1976d2;">
+                <div class="row setup-content" id="step-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-xs-6">
+                        <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
+                            <div class="input-search">
+                                <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Track Your Order" class="form-control">
+                                <div class="trackingCode" id="trackingCodeSpace"></div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <!-- end part -->
             </div>
+            <!-- end part -->
         </div>
-       
-     </div>
+    </div>
 </div>
 <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>
 <!-- Script-->

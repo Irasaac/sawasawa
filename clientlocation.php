@@ -4,6 +4,9 @@
 	if (isset($_GET['postId'])) {
 		$postId = $_GET['postId'];
 	}
+    else {
+        header("location: index.php");
+    }
     if (isset($_POST['cityLat'])) {
         $_SESSION['Latitude'] = $_POST['cityLat'];
         $_SESSION['Longitude'] = $_POST['cityLng'];
@@ -28,12 +31,24 @@
         <link rel="stylesheet" type="text/css" href="assets/css/animate.css" />
         <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="assets/css/index9.css" />
-        <!--[if IE]>
-        <style>.form-category .icon {display: none;}</style>
-        <![endif]--> 
+        <link rel="stylesheet" type="text/css" href="css/stepwizard.css" />
         <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
         <link rel="stylesheet" type="text/css" href="assets/css/responsive9.css" />
-        <title>SAWASAWA</title>
+        <title>PANDAGALI</title>
+        <style type="text/css">
+            .trackingCode {    
+                padding: 13px;
+                width: 300px;
+                text-align: left;
+                margin: auto;
+                font-weight: bold;
+            }
+            .trackingcode-form-search {
+                margin: 45px auto;
+                padding: 13px;
+                width: 300px;
+            }
+        </style>
     </head>
     <body class="home market-home">
         <!-- MAIN HEADER -->
@@ -84,31 +99,54 @@
             </div>
         </div>
         <!-- Modal of client location input -->
-        <div id="clientLocation" class="" role="dialog">
-          <div class="modal-dialog">
+        <div class="content-page" style="margin-top: 20px;">
+            <div class="container">
+                <div id="clientLocation" class="" role="dialog">
+                  <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Enter your Location please</h4>
-              </div>
-              <form action="clientlocation.php" method="post">
-              <div class="modal-body">
-                <input class="form-control" type="text" name="inputlocation" id="inputlocation" placeholder=" Enter client Location">
-                <input type="text" id="cityLng" name="cityLng" value="" hidden>
-                <input type="text" id="cityLat" name="cityLat" value="" hidden>
-                <input type="text" id="city2" name="city2" value="" hidden>
-                <input type="text" id="postId" name="postId" value="<?php echo $postId; ?>" hidden>
-              </div>
-              <div class="modal-footer">
-                <input type="submit" class="btn btn-default" value="Submit">
-              </div>
-            </form>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Enter your Location please</h4>
+                      </div>
+                      <form action="clientlocation.php" method="post">
+                      <div class="modal-body">
+                        <input class="form-control" type="text" name="inputlocation" id="inputlocation" placeholder=" Enter client Location">
+                        <input type="text" id="cityLng" name="cityLng" value="" hidden>
+                        <input type="text" id="cityLat" name="cityLat" value="" hidden>
+                        <input type="text" id="city2" name="city2" value="" hidden>
+                        <input type="text" id="postId" name="postId" value="<?php echo $postId; ?>" hidden>
+                      </div>
+                      <div class="modal-footer">
+                        <input type="submit" class="btn btn-default" value="Submit">
+                      </div>
+                    </form>
+                    </div>
+
+
+                  </div>
+                </div>
             </div>
-
-
-          </div>
+            <div class="footer">
+                <div class="row">
+                    <!-- Column left -->
+                    <div class="stepwizardfooter" style="background-color: #1976d2;">
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-md-3"></div>
+                            <div class="col-xs-6">
+                                <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
+                                    <div class="input-search">
+                                        <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Track Your Order" class="form-control">
+                                        <div class="trackingCode" id="trackingCodeSpace"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end part -->
+                </div>
+            </div>
         </div>
         <a href="#" class="scroll_top" title="Scroll to Top" style="display: inline;">Scroll</a>
         <!-- Script-->

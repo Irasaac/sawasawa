@@ -188,11 +188,11 @@
     <link rel="stylesheet" type="text/css" href="assets/lib/fancyBox/jquery.fancybox.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/animate.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/index2.css" />
     <link rel="stylesheet" type="text/css" href="assets/css/index9.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
-    <link rel="stylesheet" type="text/css" href="assets/css/responsive2.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/index2.css" />
     <link rel="stylesheet" type="text/css" href="css/stepwizard.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/quick-view.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/responsive9.css" />
     <title><?php echo $postTitle;?></title>
 	  <script src="js/jquery.js"></script>
       <style type="text/css">
@@ -236,6 +236,7 @@
       </style>
 </head>
 <body class="shop-single-product detail-page">
+    <!-- MAIN HEADER -->
     <div class="main-header">
         <div class="container">
             <div class="row">
@@ -282,6 +283,7 @@
             </div>    
         </div>
     </div>
+    <!-- END MANIN HEADER -->
     <div class="wrapper">
         <div class="breadcrumb clearfix">
             <div class="container">
@@ -294,78 +296,13 @@
         <div class="page-content" style="background: #e6e6e6; padding: unset;">
             <div class="container" style="padding-left: 50px;
                 padding-right: 50px;
-                background: #ececec">
-                <div class="row">
-                    <!-- Main content -->
-                    <div class="col-left col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <div class="row relative-product" style="margin-top: 70px;">
-                            <div class="nav-menu custom-menu">
-                                <div class="navbar-label">
-                                    <h3 class="title">Suggested Agent</h3>
-                                </div>
-                            </div>
-                        </div><br>
-                        <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 300px;">
-                            <div>
-                                <?php 
-                                    $selectAgent = $db->query("SELECT * FROM `users` WHERE account_type = 'agent'");
-                                    while($agent = mysqli_fetch_array($selectAgent)){
-                                        $agentId = $agent['id'];
-                                        $agentLocation = $agent['adress'];
-
-                                       ?>
-                                            <div data-toggle="modal" data-target="#<?php echo $agent['id'];?>" class="shipp-card" title="click for more information">
-                                                <div style="text-align: center;"><h2><?php echo $agent['username'];?></h2></div>
-                                                <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-size: cover; height: 90px; width: 90px; background-position: center;">
-                                                </div>
-                                                <div class="row" style="margin: 5px -10px;">
-                                                    <div class="col-md-3">
-                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
-                                                    </div>
-                                                    <div class="col-md-9">
-                                                        <?php echo $agent['names'];?><br>
-                                                        <?php echo $agent['phone'];?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div id="<?php echo $agent['id'];?>" class="modal fade" role="dialog">
-                                              <div class="modal-dialog">
-
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title"><?php echo $agent['names'];?></h4>
-                                                  </div>
-                                                <div class="modal-body" style="position: relative; background-image: url(<?php echo'users/'.$agent['id'].'';?>.jpg); background-size: contain; height: 300px; background-position: center;">
-                                                </div>
-                                                  <div class="modal-footer" style="text-align: unset;">
-                                                    <div class="col-md-9">
-                                                        <strong>Name:</strong> <?php echo $agent['names'];?><br>
-                                                        <strong>Phone:</strong> <?php echo $agent['phone'];?><br>
-                                                        <strong>Location:</strong> <?php echo $agent['adress'];?>
-                                                    </div>
-                                                    <div class="col-md-3"></div>
-                                                    <hr>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                  </div>
-                                                </div>
-
-                                              </div>
-                                            </div>
-                                        <?php 
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                        <!-- end Block fillter -->
-                    </div><!-- End Column left -->
+                background: #ffffff">
+                <div class="row"><!-- End Column left -->
                     <div class="col-lg-8 col-md-8 col-sm-12 detail" style="margin-top: 70px;">
                         <div class="primary-box">
                             <!-- product-imge-->
                             <div class="product-image">
-                                <!-- <div class="product-img-thumb">
+                                <div class="product-img-thumb">
                                     <ul class="bxslider">
                                         <li class="item">
                                             <img data-zoom-image="products/<?php echo $postId;?>.jpg"  src="products/<?php echo $postId;?>.jpg" alt=""/> 
@@ -383,7 +320,7 @@
                                             <img data-zoom-image="products/<?php echo $postId;?>d.jpg" src="products/<?php echo $postId;?>d.jpg" alt=""/> 
                                         </li>
                                     </ul>
-                                </div> -->
+                                </div>
                                 <div class="product-full">
                                     <img id="product-zoom" src="products/<?php echo $postId;?>.jpg" data-zoom-image="products/<?php echo $postId;?>.jpg" alt="<?php echo $postTitle;?>" style="width: 100%;" />
                                 </div>
@@ -541,119 +478,186 @@
                     </div><!-- End Main content -->
                     <!-- Column left -->
                     <div class="col-left col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                        <div class="row relative-product" style="margin-top: 70px;">
-                            <div class="nav-menu custom-menu">
-                                <div class="navbar-label">
-                                    <h3 class="title">Suggested Shipping</h3>
+                        <div class="row">
+                            <div class="row relative-product" style="margin-top: 70px;">
+                                <div class="nav-menu custom-menu">
+                                    <div class="navbar-label">
+                                        <h3 class="title">Suggested Shipping</h3>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 150px;">
+                                <div>
+                                    <?php 
+                                        $selectshipping = $db->query("SELECT * FROM `shipper`") or die(mysqli_error());
+
+                                        function distbtnshipperandpro($companylatitude, $companylongitude, $shipperlatitude, $shipperlongitude) {
+                                            $earthRadius = 6371; // Earth’s mean radius in meter
+
+                                            $latFrom = deg2rad($companylatitude);
+                                            $lonFrom = deg2rad($companylongitude);
+                                            $latTo = deg2rad($shipperlatitude);
+                                            $lonTo = deg2rad($shipperlongitude);
+
+                                            $latDelta = $latTo - $latFrom;
+                                            $lonDelta = $lonTo - $lonFrom;
+
+                                            $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+                                            return $angle * $earthRadius; // returns the distance
+                                        }
+                                        while($shipper = mysqli_fetch_array($selectshipping)){
+                                            $shipperId = $shipper['shipperId'];
+                                            $shipperCompany = $db->query("SELECT * FROM `company1` WHERE companyUserCode = '$shipperId'");
+                                            $shipping = mysqli_fetch_array($shipperCompany);
+                                            $shipperlat = $shipping['latitude'];
+                                            $shipperlong = $shipping['longitude'];
+
+                                            $companylatitude = $companylatitude;
+                                            $companylongitude = $companylongitude;
+
+                                            $shipperlatitude = $shipperlat;
+                                            $shipperlongitude = $shipperlong;
+
+                                            $clientlatitude = $cityLat;
+                                            $clientlongitude = $cityLng;
+
+                                            $distbtnshandpro = distbtnshipperandpro($companylatitude, $companylongitude, $shipperlatitude, $shipperlongitude);
+
+                                            $distbtnproandcli = distbtnshipperandpro($companylatitude, $companylongitude, $clientlatitude, $clientlongitude);
+
+                                            $totalDistance = $distbtnproandcli + $distbtnshandpro;
+
+                                            $selectshipper = $db->query("SELECT * FROM `users` WHERE id = '$shipperId'") or die(mysqli_error());
+                                            $shipperInfo = mysqli_fetch_array($selectshipper);
+                                           ?>
+                                                <div data-toggle="modal" data-target="#<?php echo $shipper['shippingId'];?>" class="shipp-card" title="click for more information">
+                                                    <div style="text-align: center;"><h2><?php echo $shipper['title'];?></h2></div>
+                                                    <div style="position: relative; margin-top: 15px;">
+                                                        <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
+                                                    </div>
+                                                    <div class="row" style="margin: 5px -10px;">
+                                                        <div class="col-md-3">
+                                                            <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(users/<?php echo $shipperInfo['Pic'];?>); background-repeat: no-repeat;background-position: center;"></div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <?php echo $shipperInfo['names'];?><br>
+                                                            <?php echo $shipperInfo['phone'];?>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                                <div id="<?php echo $shipper['shippingId'];?>" class="modal fade" role="dialog">
+                                                  <div class="modal-dialog">
+
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title"><?php echo $shipper['title'];?></h4>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <div class="col-md-3">
+                                                            <div style=" height: 115px;width: 115px;border-radius: 50%; background-image: url(users/<?php echo $shipperInfo['Pic'];?>); background-repeat: no-repeat;background-position: center;"></div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <p style="text-align:left;">
+                                                                <b>Names: </b> <?php echo $shipperInfo['names'];?><br>
+                                                                <b>Contact: </b><?php echo $shipperInfo['phone'];?><br>
+                                                                <b>Limit: </b> <?php echo $shipper['WeightLimit'];?> Kg<br>
+                                                                <b>Price Per Km: </b> <?php echo $shipper['pricepkilo'];?> frw<br>
+                                                                 <b>Car Address: </b> <?php echo $shipper['address'];?><br><!-- 
+                                                                <b>car lat: </b> <?php echo $shipper['latitude'];?><br>
+                                                                <b>Car long: </b> <?php echo $shipper['longitude'];?><br>
+                                                                <b>pro lat: </b> <?php echo $companylatitude;?><br>
+                                                                <b>pro long: </b> <?php echo $companylongitude;?><br>
+                                                                <b>client lat: </b> <?php echo $clientlatitude;?><br>
+                                                                <b>client long: </b> <?php echo $clientlongitude;?><br>
+                                                                <b>Dist btn S and P: </b> <?php echo $distbtnshandpro;?> km<br>
+                                                                <b>Dist btn P and C: </b> <?php echo $distbtnproandcli;?> km<br>
+                                                                <b>Total Distance: </b> <?php echo $totalDistance;?> km<br> -->
+                                                                <b>Amount: </b> <?php echo number_format($totalDistance * $shipper['pricepkilo']) ;?> frw<br>
+                                                            </p>
+                                                        </div>
+                                                        <hr>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                      </div>
+                                                    </div>
+
+                                                  </div>
+                                                </div>
+                                            <?php 
+                                        }
+                                    ?>
                                 </div>
                             </div>
-                        </div><br>
-                        <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 300px;">
-                            <div>
-                                <?php 
-                                    $selectshipping = $db->query("SELECT * FROM `shipper`") or die(mysqli_error());
+                        </div>
+                    <!-- Main content -->
+                        <div class="row">
+                            <div class="row relative-product" style="margin-top: 70px;">
+                                <div class="nav-menu custom-menu">
+                                    <div class="navbar-label">
+                                        <h3 class="title">Suggested Agent</h3>
+                                    </div>
+                                </div>
+                            </div><br>
+                            <div class="left-banner" style="overflow-y: auto;overflow-x: auto;max-height: 150px;">
+                                <div>
+                                    <?php 
+                                        $selectAgent = $db->query("SELECT * FROM users u INNER JOIN useraccounttype ua WHERE u.id = ua.userId AND accName = 'agent'");
+                                        while($agent = mysqli_fetch_array($selectAgent)){
+                                            $agentId = $agent['id'];
+                                            $agentLocation = $agent['adress'];
 
-                                    function distbtnshipperandpro($companylatitude, $companylongitude, $shipperlatitude, $shipperlongitude) {
-                                        $earthRadius = 6371; // Earth’s mean radius in meter
-
-                                        $latFrom = deg2rad($companylatitude);
-                                        $lonFrom = deg2rad($companylongitude);
-                                        $latTo = deg2rad($shipperlatitude);
-                                        $lonTo = deg2rad($shipperlongitude);
-
-                                        $latDelta = $latTo - $latFrom;
-                                        $lonDelta = $lonTo - $lonFrom;
-
-                                        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-                                        return $angle * $earthRadius; // returns the distance
-                                    }
-                                    while($shipper = mysqli_fetch_array($selectshipping)){
-                                        $shipperId = $shipper['shipperId'];
-                                        $shipperCompany = $db->query("SELECT * FROM `company1` WHERE companyUserCode = '$shipperId'");
-                                        $shipping = mysqli_fetch_array($shipperCompany);
-                                        $shipperlat = $shipping['latitude'];
-                                        $shipperlong = $shipping['longitude'];
-
-                                        $companylatitude = $companylatitude;
-                                        $companylongitude = $companylongitude;
-
-                                        $shipperlatitude = $shipperlat;
-                                        $shipperlongitude = $shipperlong;
-
-                                        $clientlatitude = $cityLat;
-                                        $clientlongitude = $cityLng;
-
-                                        $distbtnshandpro = distbtnshipperandpro($companylatitude, $companylongitude, $shipperlatitude, $shipperlongitude);
-
-                                        $distbtnproandcli = distbtnshipperandpro($companylatitude, $companylongitude, $clientlatitude, $clientlongitude);
-
-                                        $totalDistance = $distbtnproandcli + $distbtnshandpro;
-
-                                        $selectshipper = $db->query("SELECT * FROM `users` WHERE id = '$shipperId'") or die(mysqli_error());
-                                        $shipperInfo = mysqli_fetch_array($selectshipper);
-                                       ?>
-                                            <div data-toggle="modal" data-target="#<?php echo $shipper['shippingId'];?>" class="shipp-card" title="click for more information">
-                                                <div style="text-align: center;"><h2><?php echo $shipper['title'];?></h2></div>
-                                                <div style="position: relative; margin-top: 15px;">
-                                                    <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
-                                                </div>
-                                                <div class="row" style="margin: 5px -10px;">
-                                                    <div class="col-md-3">
-                                                        <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
+                                           ?>
+                                                <div data-toggle="modal" data-target="#<?php echo $agent['id'];?>" class="shipp-card" title="click for more information">
+                                                    <div style="text-align: center;"><h2><?php echo $agent['username'];?></h2></div>
+                                                    <div style="position: relative; margin: 10px auto;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['Pic'].'';?>); background-size: cover; height: 90px; width: 90px; background-position: center;">
                                                     </div>
-                                                    <div class="col-md-9">
-                                                        <?php echo $shipperInfo['names'];?><br>
-                                                        <?php echo $shipperInfo['phone'];?>
+                                                    <div class="row" style="margin: 5px -10px;">
+                                                        <div class="col-md-3">
+                                                            <div style=" height: 35px;width: 35px;border-radius: 50%; background-image: url(<?php echo'users/'.$agent['Pic'].'';?>); background-repeat: no-repeat;background-position: center;"></div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <?php echo $agent['names'];?><br>
+                                                            <?php echo $agent['phone'];?>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- Modal -->
-                                            <div id="<?php echo $shipper['shippingId'];?>" class="modal fade" role="dialog">
-                                              <div class="modal-dialog">
+                                                <!-- Modal -->
+                                                <div id="<?php echo $agent['id'];?>" class="modal fade" role="dialog">
+                                                  <div class="modal-dialog">
 
-                                                <!-- Modal content-->
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                    <h4 class="modal-title"><?php echo $shipper['title'];?></h4>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                    <img src="shipper/<?php echo $shipper['shippingId'];?>.jpg">
-                                                  </div>
-                                                  <div class="modal-footer">
-                                                    <div class="col-md-3">
-                                                        <div style=" height: 115px;width: 115px;border-radius: 50%; background-image: url(users/<?php echo $shipperId;?>.jpg); background-repeat: no-repeat;background-position: center;"></div>
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title"><?php echo $agent['names'];?></h4>
+                                                      </div>
+                                                    <div class="modal-body" style="position: relative; background-image: url(<?php echo'users/'.$agent['Pic'].'';?>); background-size: contain; height: 300px; background-position: center;">
                                                     </div>
-                                                    <div class="col-md-9">
-                                                        <p style="text-align:left;">
-                                                            <b>Names: </b> <?php echo $shipperInfo['names'];?><br>
-                                                            <b>Contact: </b><?php echo $shipperInfo['phone'];?><br>
-                                                            <b>Limit: </b> <?php echo $shipper['WeightLimit'];?> Kg<br>
-                                                            <b>Price Per Km: </b> <?php echo $shipper['pricepkilo'];?> frw<br>
-                                                             <b>Car Address: </b> <?php echo $shipper['address'];?><br><!-- 
-                                                            <b>car lat: </b> <?php echo $shipper['latitude'];?><br>
-                                                            <b>Car long: </b> <?php echo $shipper['longitude'];?><br>
-                                                            <b>pro lat: </b> <?php echo $companylatitude;?><br>
-                                                            <b>pro long: </b> <?php echo $companylongitude;?><br>
-                                                            <b>client lat: </b> <?php echo $clientlatitude;?><br>
-                                                            <b>client long: </b> <?php echo $clientlongitude;?><br>
-                                                            <b>Dist btn S and P: </b> <?php echo $distbtnshandpro;?> km<br>
-                                                            <b>Dist btn P and C: </b> <?php echo $distbtnproandcli;?> km<br>
-                                                            <b>Total Distance: </b> <?php echo $totalDistance;?> km<br> -->
-                                                            <b>Amount: </b> <?php echo number_format($totalDistance * $shipper['pricepkilo']) ;?> frw<br>
-                                                        </p>
+                                                      <div class="modal-footer" style="text-align: unset;">
+                                                        <div class="col-md-9">
+                                                            <strong>Name:</strong> <?php echo $agent['names'];?><br>
+                                                            <strong>Phone:</strong> <?php echo $agent['phone'];?><br>
+                                                            <strong>Location:</strong> <?php echo $agent['adress'];?>
+                                                        </div>
+                                                        <div class="col-md-3"></div>
+                                                        <hr>
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                      </div>
                                                     </div>
-                                                    <hr>
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
                                                   </div>
                                                 </div>
-
-                                              </div>
-                                            </div>
-                                        <?php 
-                                    }
-                                ?>
+                                            <?php 
+                                        }
+                                    ?>
+                                </div>
                             </div>
+                            <!-- end Block fillter -->
                         </div>
                         <!-- end Block fillter -->
                     </div><!-- End Column left -->
@@ -678,13 +682,13 @@
             <div class="footer">
                 <div class="row">
                     <!-- Column left -->
-                    <div class="stepwizardfooter">
+                    <div class="stepwizardfooter" style="background-color: #1976d2;">
                         <div class="row setup-content" id="step-2">
                             <div class="col-md-3"></div>
                             <div class="col-xs-6">
                                 <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
                                     <div class="input-search">
-                                        <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Enter tracking code to see your order" class="form-control">
+                                        <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Track Your Order" class="form-control">
                                         <div class="trackingCode" id="trackingCodeSpace"></div>
                                     </div>
                                 </form>

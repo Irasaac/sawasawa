@@ -111,24 +111,24 @@ if (isset($_GET['CatID'])) {
                         </div>
                     </div>
                 </div>
-                <div class="footer">
-                    <div class="row">
-                        <!-- Column left -->
-                        <div class="stepwizardfooter">
-                            <div class="row setup-content" id="step-2">
-                                <div class="col-md-3"></div>
-                                <div class="col-xs-6">
-                                    <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
-                                        <div class="input-search">
-                                            <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Enter tracking code to see your order" class="form-control">
-                                            <div class="trackingCode" id="trackingCodeSpace"></div>
-                                        </div>
-                                    </form>
-                                </div>
+            </div>
+            <div class="footer">
+                <div class="row">
+                    <!-- Column left -->
+                    <div class="stepwizardfooter" style="background-color: #1976d2;">
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-md-3"></div>
+                            <div class="col-xs-6">
+                                <form class="trackingcode-form-search toggle-mobile" name="trackingCodeform">
+                                    <div class="input-search">
+                                        <input onkeyup="trackingCode()" type="text" name="trackingcode"  placeholder="Track Your Order" class="form-control">
+                                        <div class="trackingCode" id="trackingCodeSpace"></div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                        <!-- end part -->
                     </div>
+                    <!-- end part -->
                 </div>
             </div>
         </div>
