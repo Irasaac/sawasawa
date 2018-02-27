@@ -133,7 +133,7 @@ if(isset($_GET['postId']))
 										<tr><td><a href="products/<?php echo $postId;?>.jpg"><img src="../products/<?php echo $postId;?>.jpg" width="300"/></a></td></tr>
 										<tr><td>
 												<div id="loadedit">
-													<form action="userpost.php" method="post" enctype="multipart/form-data">
+													<form action="userPost.php" method="post" enctype="multipart/form-data">
 														<input id="postId" name="postId" value="<?php echo $postId;?>" hidden>
 														<div class="uk-form-row">
 				                                            <label for="postTitle">Product Name</label>
@@ -302,7 +302,7 @@ if(isset($_GET['postId']))
 											<tr><td><a href="shipper/<?php echo $carId;?>.jpg"><img src="../shipper/<?php echo $carId;?>.jpg" width="300"/></a></td></tr>
 											<tr><td>
 													<div id="loadedit">
-														<form action="userpost.php" method="post" enctype="multipart/form-data">
+														<form action="userPost.php" method="post" enctype="multipart/form-data">
 															<input id="postId" name="postId" value="<?php echo $postId;?>" hidden>
 															<div class="uk-form-row">
 					                                            <label for="carType">Car Type</label>
