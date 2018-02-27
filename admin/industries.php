@@ -42,7 +42,7 @@ else {
 
 	if (isset($_POST['addIndustry'])) {
 		$industryName = $_POST['industryName'];
-		$insertIt = $db ->query("INSERT INTO industries VALUES('', '$industryName')");
+		$insertIt = $db ->query("INSERT INTO industries(industryName) VALUES('$industryName')");
 		header("location: industries.php");
 	}
 
