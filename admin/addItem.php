@@ -63,7 +63,7 @@ if ($existCount > 0) {
 		VALUES (
 		'$itemName', '$productCode', '$quantity', '$unityPrice', 
 		now(), '$postedBy', '$unit', '$itemCompanyCode', '$description', 
-		'$postDeadline')")or die (mysqli_error());
+		'$postDeadline')");
 		$sql9 = $db->query("SELECT * FROM items1 ORDER BY itemId DESC limit 1");
 		while($row = mysqli_fetch_array($sql9)){
 			$Imagename = $row['itemId'];
