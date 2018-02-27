@@ -298,7 +298,7 @@
                 padding-right: 50px;
                 background: #ffffff">
                 <div class="row"><!-- End Column left -->
-                    <div class="col-lg-8 col-md-8 col-sm-12 detail" style="margin-top: 70px;">
+                    <div class="col-lg-10 col-md-10 col-sm-12 detail" style="margin-top: 70px;">
                         <div class="primary-box">
                             <!-- product-imge-->
                             <div class="product-image">
