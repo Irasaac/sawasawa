@@ -56,7 +56,7 @@ if ($existCount > 0) {
 		$unit = $_POST['unit'];
 		include ("../db.php");
 		
-		$sql = $db->query("INSERT INTO items1 (
+		$sql = $db->query("INSERT INTO items1(
 		itemName, productCode, quantity, unityPrice, 
 		inDate, postedBy,unit, itemCompanyCode, description, 
 		postDeadline) 
