@@ -94,7 +94,7 @@ else {
 								<tbody>
 									<?php
 										include("db.php");
-										$getIndustries = $db->query("SELECT * FROM Industries");
+										$getIndustries = $db->query("SELECT * FROM industries");
 										$countIndustries = mysqli_num_rows($getIndustries);
 										if($countIndustries > 0) {
 											$n = 0;
